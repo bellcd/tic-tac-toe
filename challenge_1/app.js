@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gameIsFinished = true;
     }
 
+    // TODO: after winning / tie-ing , disable click functionality on tiles
     if (gameIsFinished) {
       // if yes
         // display relevant message and update scores

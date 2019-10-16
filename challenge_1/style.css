@@ -3,10 +3,14 @@
   flex-wrap: wrap;
   width: 600px;
   height: 600px;
+  background-color: #d0ffd0;
 }
 
 .tile {
-  background-color: white;
   flex: 1 1 200px;
   text-align: center;
+}
+
+.tile:hover {
+  background-color: gray;
 }
