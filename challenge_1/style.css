@@ -1,0 +1,12 @@
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  width: 600px;
+  height: 600px;
+}
+
+.tile {
+  background-color: white;
+  flex: 1 1 200px;
+  text-align: center;
+}
