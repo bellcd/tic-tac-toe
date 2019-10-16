@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     player2: 0,
     move: 0,
     // boardRep: [null, null, null, null, null, null, null, null, null]
-    boardRep: [[null, null, null], [null, null, null], [null, null, null]]
+    boardRep: [[null, null, null], [null, null, null], [null, null, null]],
+    boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]]
   }
 
   // representation of the board
@@ -63,6 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
       diagonalMatch = true;
     }
 
+    // check if someone won OR tie
+      // if yes
+        // display relevant message and update scores
+        // enable reset button AND disable board ??
     if (rowMatch) {
       console.log('rowMatch');
     } else if (columnMatch) {
@@ -72,15 +77,32 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (game.move === 9) {
       console.log('tied');
     }
-    // check if someone won OR tie
-      // if yes
-        // display relevant message and update scores
-        // enable reset button AND disable board ??
+
   }
 
-  // event listener on the board
-  const board = document.querySelector('.board');
+  function handleReset(e) {
+    // remove any HTML content from each of the .tile's
+    document.querySelectorAll('.tile')
+      .forEach((tile) => {
+        tile.innerHTML = '';
+      });
 
+    // change game.boardRep back to being filled with null
+    game.boardRep = game.boardRepTemplate.map((row) => {
+      return row.slice();
+    });
+
+    // change game.move back to 0
+    game.move = 0;
+  }
+
+  // event listeners
+  // board
+  window.board = document.querySelector('.board');
   board.addEventListener('click', boardClick);
+
+  // reset button
+  window.resetBtn = document.querySelector('#reset');
+  resetBtn.addEventListener('click', handleReset);
 
 });
