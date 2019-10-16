@@ -1,0 +1,16 @@
+{
+  "name": "json-to-csv",
+  "version": "1.0.0",
+  "description": "An app that allows you to send JSON to a server, that will return that JSON as a CSV.",
+  "homepage": "https://github.com/bellcd/rpt17-mini-apps-1/tree/master/challenge_2",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon ./server.js",
+    "start-client": "open ./client/index.html"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "jquery": "^3.4.1"
+  },
+  "devDependencies": {}
+}
