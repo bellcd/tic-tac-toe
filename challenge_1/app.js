@@ -1,26 +1,28 @@
 
 // TODO: is this a decent approach to waiting for everything to load before running this script??
 document.addEventListener('DOMContentLoaded', () => {
-  const game = {
+  window.game = {
     player1: 0,
     player2: 0,
-    move: 0
+    move: 0,
+    // boardRep: [null, null, null, null, null, null, null, null, null]
+    boardRep: [[null, null, null], [null, null, null], [null, null, null]]
   }
 
   // representation of the board
   // const boardRep = [[null, null, null], [null, null, null], [null, null, null]];
-  const boardRep = [null, null, null, null, null, null, null, null, null];
 
   function boardClick(e) {
-    const gameSquare = e.target.dataset.i;
+    const row = e.target.dataset.row;
+    const col = e.target.dataset.col;
     const piece = game.move % 2 === 0 ? 'X' : 'O';
 
     // looks at the representation of the board
 
     // if the spot clicked on is null
-    if (boardRep[gameSquare] === null) {
+    if (game.boardRep[row][col] === null) {
       // set spot to either O OR X (depending on what turn we're on)
-      boardRep[gameSquare] = piece;
+      game.boardRep[row][col] = piece;
 
       // update DOM element
       e.target.innerHTML = piece;
@@ -29,6 +31,47 @@ document.addEventListener('DOMContentLoaded', () => {
       return; // because the click happened on a square that already has a piece in it ...
     }
 
+    // there's definitely a better way to check for winning tic tac toe patterns ...
+
+    // [[null, null, null], [null, null, null], [null, null, null]];
+    let rowMatch;
+    let columnMatch;
+    let diagonalMatch;
+
+    rowMatch = game.boardRep.some((row) => {
+      return row.every((gamePiece) => {
+        return piece === gamePiece;
+      });
+    });
+
+    const everyMatch = [];
+    for (let j = 0; j < 3; j++) {
+      const match = [];
+      for (let i = 0; i < 3; i++) {
+        match.push(game.boardRep[i][j]);
+      }
+      everyMatch.push(match.every((gamePiece) => gamePiece === piece));
+    }
+    columnMatch = everyMatch.some((match) => match);
+
+
+    if (game.boardRep[0][0] === piece && game.boardRep[1][1] === piece && game.boardRep[2][2] === piece) {
+      // left diagonal match
+      diagonalMatch = true;
+    } else if (game.boardRep[0][2] === piece && game.boardRep[1][1] === piece && game.boardRep[2][0] === piece) {
+      // right diagonal match
+      diagonalMatch = true;
+    }
+
+    if (rowMatch) {
+      console.log('rowMatch');
+    } else if (columnMatch) {
+      console.log('columnMatch');
+    } else if (diagonalMatch) {
+      console.log('diagonalMatch');
+    } else if (game.move === 9) {
+      console.log('tied');
+    }
     // check if someone won OR tie
       // if yes
         // display relevant message and update scores
