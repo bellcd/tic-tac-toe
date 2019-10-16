@@ -68,25 +68,50 @@ document.addEventListener('DOMContentLoaded', () => {
       // if yes
         // display relevant message and update scores
         // enable reset button AND disable board ??
+
+    let message;
+    let gameIsFinished = false;
+
+    // TODO: there's definitely a better way to handle this ... far too WET
     if (rowMatch) {
       console.log('rowMatch');
+      message = `${piece} wins`;
+      gameIsFinished = true;
     } else if (columnMatch) {
       console.log('columnMatch');
+      message = `${piece} wins`;
+      gameIsFinished = true;
     } else if (diagonalMatch) {
       console.log('diagonalMatch');
+      message = `${piece} wins`;
+      gameIsFinished = true;
     } else if (game.move === 9) {
       console.log('tied');
+      message = `It's a tie`;
+      gameIsFinished = true;
     }
+
+    if (gameIsFinished) {
+      displayMessage(message);
+    }
+
 
   }
 
+  function displayMessage(message) {
+    window.messageDiv.innerHTML = message;
+  }
+
   function handleReset(e) {
-    // remove any HTML content from each of the .tile's
+    // remove any HTML content from
+      // each of the .tile's
     document.querySelectorAll('.tile')
       .forEach((tile) => {
         tile.innerHTML = '';
       });
 
+      // the messageDiv
+      window.messageDiv.innerHTML = '';
     // change game.boardRep back to being filled with null
     game.boardRep = game.boardRepTemplate.map((row) => {
       return row.slice();
@@ -94,6 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // change game.move back to 0
     game.move = 0;
+
+
   }
 
   // event listeners
@@ -104,5 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // reset button
   window.resetBtn = document.querySelector('#reset');
   resetBtn.addEventListener('click', handleReset);
+
+  // message div
+  window.messageDiv = document.querySelector('.message');
 
 });
