@@ -1,103 +1,58 @@
 
 // TODO: is this a decent approach to waiting for everything to load before running this script??
 document.addEventListener('DOMContentLoaded', () => {
+
+  // MODEL
   window.game = {
     player1: 0,
     player2: 0,
     move: 0,
-    // boardRep: [null, null, null, null, null, null, null, null, null]
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
-    boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]]
-  }
-
-  // representation of the board
-  // const boardRep = [[null, null, null], [null, null, null], [null, null, null]];
-
-  function boardClick(e) {
-    const row = e.target.dataset.row;
-    const col = e.target.dataset.col;
-    const piece = game.move % 2 === 0 ? 'X' : 'O';
-
-    // looks at the representation of the board
-
-    // if the spot clicked on is null
-    if (game.boardRep[row][col] === null) {
-      // set spot to either O OR X (depending on what turn we're on)
+    boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
+    getTile: function(row, col) {
+      return game.boardRep[row][col];
+    },
+    setTile: function(row, col, piece) {
       game.boardRep[row][col] = piece;
-
-      // update DOM element
-      e.target.innerHTML = piece;
-      ++game.move;
-    } else {
-      return; // because the click happened on a square that already has a piece in it ...
-    }
-
-    // there's definitely a better way to check for winning tic tac toe patterns ...
-
-    // [[null, null, null], [null, null, null], [null, null, null]];
-    let rowMatch;
-    let columnMatch;
-    let diagonalMatch;
-
-    rowMatch = game.boardRep.some((row) => {
-      return row.every((gamePiece) => {
-        return piece === gamePiece;
+    },
+    resetBoardRep: function() {
+      game.boardRep = game.boardRepTemplate.map((row) => {
+        return row.slice();
       });
-    });
-
-    const everyMatch = [];
-    for (let j = 0; j < 3; j++) {
-      const match = [];
-      for (let i = 0; i < 3; i++) {
-        match.push(game.boardRep[i][j]);
+    },
+    // TODO: there's definitely a better way to check for winning tic tac toe patterns ...
+    isRowWin: function(piece) {
+      return game.boardRep.some((row) => {
+        return row.every((gamePiece) => {
+          return piece === gamePiece;
+        });
+      });
+    },
+    isColumnWin: function(piece) {
+      const everyMatch = [];
+      for (let j = 0; j < 3; j++) {
+        const match = [];
+        for (let i = 0; i < 3; i++) {
+          match.push(game.boardRep[i][j]);
+        }
+        everyMatch.push(match.every((gamePiece) => gamePiece === piece));
       }
-      everyMatch.push(match.every((gamePiece) => gamePiece === piece));
+      return everyMatch.some((match) => match);
+    },
+    isDiagonalWin: function(piece) {
+      if (game.boardRep[0][0] === piece && game.boardRep[1][1] === piece && game.boardRep[2][2] === piece) {
+        // left diagonal match
+        return true;
+      } else if (game.boardRep[0][2] === piece && game.boardRep[1][1] === piece && game.boardRep[2][0] === piece) {
+        // right diagonal match
+        return true;
+      } else {
+        return false;
+      }
     }
-    columnMatch = everyMatch.some((match) => match);
-
-
-    if (game.boardRep[0][0] === piece && game.boardRep[1][1] === piece && game.boardRep[2][2] === piece) {
-      // left diagonal match
-      diagonalMatch = true;
-    } else if (game.boardRep[0][2] === piece && game.boardRep[1][1] === piece && game.boardRep[2][0] === piece) {
-      // right diagonal match
-      diagonalMatch = true;
-    }
-
-    // check if someone won OR tie
-      // if yes
-        // display relevant message and update scores
-        // enable reset button AND disable board ??
-
-    let message;
-    let gameIsFinished = false;
-
-    // TODO: there's definitely a better way to handle this ... far too WET
-    if (rowMatch) {
-      console.log('rowMatch');
-      message = `${piece} wins`;
-      gameIsFinished = true;
-    } else if (columnMatch) {
-      console.log('columnMatch');
-      message = `${piece} wins`;
-      gameIsFinished = true;
-    } else if (diagonalMatch) {
-      console.log('diagonalMatch');
-      message = `${piece} wins`;
-      gameIsFinished = true;
-    } else if (game.move === 9) {
-      console.log('tied');
-      message = `It's a tie`;
-      gameIsFinished = true;
-    }
-
-    if (gameIsFinished) {
-      displayMessage(message);
-    }
-
-
   }
 
+  // VIEW
   function displayMessage(message) {
     window.messageDiv.innerHTML = message;
   }
@@ -113,14 +68,60 @@ document.addEventListener('DOMContentLoaded', () => {
       // the messageDiv
       window.messageDiv.innerHTML = '';
     // change game.boardRep back to being filled with null
-    game.boardRep = game.boardRepTemplate.map((row) => {
-      return row.slice();
-    });
+    game.resetBoardRep();
 
     // change game.move back to 0
     game.move = 0;
+  }
 
+   // CONTROLLER
+   function boardClick(e) {
+    const row = e.target.dataset.row;
+    const col = e.target.dataset.col;
+    const piece = game.move % 2 === 0 ? 'X' : 'O';
 
+    // looks at the representation of the board
+    // if the spot clicked on is null
+    if (game.getTile(row, col) === null) {
+      // set spot to either X OR O (depending on what turn we're on)
+      game.setTile(row, col, piece);
+
+      // update DOM element
+      e.target.innerHTML = piece;
+      ++game.move;
+    } else {
+      return; // because the click happened on a square that already has a piece in it ...
+      // TODO: add popup type thing that informs the user they can't change an alredy placed piece
+    }
+
+    let message;
+    let gameIsFinished = false;
+
+    // TODO: there's definitely a better way to handle this ... far too WET
+    // check if someone won OR tied
+    if (game.isRowWin(piece)) {
+      console.log('rowMatch');
+      message = `${piece} wins`;
+      gameIsFinished = true;
+    } else if (game.isColumnWin(piece)) {
+      console.log('columnMatch');
+      message = `${piece} wins`;
+      gameIsFinished = true;
+    } else if (game.isDiagonalWin(piece)) {
+      console.log('diagonalMatch');
+      message = `${piece} wins`;
+      gameIsFinished = true;
+    } else if (game.move === 9) {
+      console.log('tied');
+      message = `It's a tie`;
+      gameIsFinished = true;
+    }
+
+    if (gameIsFinished) {
+      // if yes
+        // display relevant message and update scores
+      displayMessage(message);
+    }
   }
 
   // event listeners
@@ -134,5 +135,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // message div
   window.messageDiv = document.querySelector('.message');
-
 });
