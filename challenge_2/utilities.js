@@ -1,28 +1,17 @@
-// handle converting the JSON data into CSV data here
-
+// handles converting the JSON data into CSV data
+// converts the input JSON object into a matrix of parallel arrays, with the first array holding the field names, and each subsequent array holding a record
 function JSONtoCSV (json) {
-
-  // series of parallel arrays
-  // look at every property in the first level of the JSON, and create an array with those properties
-  // ['firstName', 'lastName', 'county', 'city', 'role', 'sales', 'children']
-
   // create an object with the key names and their indexes in the parallel arrays ie,
     // {
       // firstName: 0,
       // lastName: 1,
-      // county: 2,
-      // city: 3,
-      // role: 4,
-      // sales: 5,
-      // children: 6,
+      // etc ...
       // nextIndex: starts at 0
     // }
 
   const indexOrder = {
     nextIndex: 0
   };
-
-
 
   function recursiveFn(arrayOfPersonElements) {
     // reduce through array of JSON, can be depth-first
