@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
+app.set('views', './client/views');
+app.set('view engine', 'ejs');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -15,7 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('client'));
 
 app.get('/', (req, res, next) => {
-  console.log('here');
+  res.render('index', { test: 'hi there' });
 });
 
 app.post('/', upload.single('jsonFile'), (req, res, next) => {

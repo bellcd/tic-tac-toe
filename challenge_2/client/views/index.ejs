@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
   <head>
     <link rel="manifest" href="manifest.json">
@@ -10,6 +9,7 @@
     <script src="app.js"></script>
   </head>
   <body>
+    <p>Hello, <%= test %>.</p>
     <!-- TODO: need to add validation to only accept JSON through EITHER the text area OR file upload, not both -->
     <form action="http://127.0.0.1:3000" method="post" enctype="multipart/form-data">
       <div>
