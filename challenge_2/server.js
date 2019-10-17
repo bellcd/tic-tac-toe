@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('client'));
 
 app.get('/', (req, res, next) => {
-  res.render('index', { test: 'hi there' });
+  res.render('index', { csv: '' });
 });
 
 app.post('/', upload.single('jsonFile'), (req, res, next) => {
@@ -27,7 +27,7 @@ app.post('/', upload.single('jsonFile'), (req, res, next) => {
   const csv = utilities.JSONtoCSV(json);
 
   // TODO: change this to use templates instead of repeating the code from index.html
-  const html = `<!DOCTYPE html>
+  let html = `<!DOCTYPE html>
   <html>
     <head>
 
@@ -54,8 +54,8 @@ app.post('/', upload.single('jsonFile'), (req, res, next) => {
   </html>`
 
   res.status(200);
-  res.write(html);
-
+  res.render('index', { csv });
+  // TODO: need to adjust this so that #download-csv 's href attr still gets populated with the blob of the file ...
 });
 
 app.post('/json', (req, res, next) => {

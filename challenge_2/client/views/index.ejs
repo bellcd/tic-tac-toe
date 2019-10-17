@@ -9,7 +9,6 @@
     <script src="app.js"></script>
   </head>
   <body>
-    <p>Hello, <%= test %>.</p>
     <!-- TODO: need to add validation to only accept JSON through EITHER the text area OR file upload, not both -->
     <form action="http://127.0.0.1:3000" method="post" enctype="multipart/form-data">
       <div>
@@ -22,7 +21,8 @@
       </div>
       <button id="form-btn" type="submit" value="submit">send the data through the form</button>
       <button id="ajax-btn" type="button">send the data with AJAX</button>
-      <p id="csv"></p>
+
+      <p id="csv"><%= csv %></p>
       <div id="download-csv-container">
         <a id="download-csv" href="" download="data.csv">Download CSV</a>
       </div>
