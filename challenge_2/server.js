@@ -43,6 +43,9 @@ app.post('/', upload.single('jsonFile'), (req, res, next) => {
         <button type="submit" value="submit">send the data</button>
       </form>
       <p id="csv">${csv}</p>
+      <div id="download-csv">
+        <a>Download CSV</a>
+      </div>
     </body>
   </html>`
 

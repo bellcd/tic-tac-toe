@@ -1,6 +1,9 @@
+// TODO: confirm whether we're supposed to create a file on the server and send that file back, OR can we send the csv formatted data back as a string??
+
 $(() => {
   const $btn = $('button');
   const $csv = $('#csv');
+  const $downloadCSV = $('#download-csv');
 
   // MODEL
   function handleClick() {
@@ -33,9 +36,37 @@ $(() => {
     });
   }
 
+  function handleDownloadCSV() {
+    // generate a file from the string in JS using File()
+    const file = new File([$csv.text()], 'data.csv', {
+      type: 'application/json'
+    });
+
+    // create a URL to that file using URL.createObjectURL()
+    const fileURL = URL.createObjectURL(file);
+
+    // download that URL using downloads.download()
+    browser.downloads.download(fileURL)
+      .then(() => {
+        console.log('download successfull');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
+
+      // revoke the object url after download by
+        // listening for the downloads.onChanged event
+        // calling URL.revokeObjectURL()
+  }
+
   // CONTROLLER
   $btn.on('click', (e) => {
     handleClick();
+  })
+
+  $downloadCSV.on('click', (e) => {
+    handleDownloadCSV();
   })
 
   // VIEW
