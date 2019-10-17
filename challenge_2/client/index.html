@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="manifest" href="manifest.json">
     <script
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
@@ -20,8 +21,8 @@
       </div>
       <button type="button" value="submit">send the data</button>
       <p id="csv"></p>
-      <div id="download-csv">
-        <a>Download CSV</a>
+      <div id="download-csv-container">
+        <a id="download-csv" href="" download="data.csv">Download CSV</a>
       </div>
     </form>
   </body>

@@ -29,6 +29,7 @@ $(() => {
       processData: false,
       success: (data, status, jqXHR) => {
         updateCSV(data);
+        createFile(data);
       },
       error: (jqXHR, textStatus, error) => {
         console.log(error); // TODO: better error handling
@@ -36,28 +37,15 @@ $(() => {
     });
   }
 
-  function handleDownloadCSV() {
+  function createFile(data) {
     // generate a file from the string in JS using File()
-    const file = new File([$csv.text()], 'data.csv', {
+    const file = new File([data], 'data.csv', {
       type: 'application/json'
     });
 
     // create a URL to that file using URL.createObjectURL()
     const fileURL = URL.createObjectURL(file);
-
-    // download that URL using downloads.download()
-    browser.downloads.download(fileURL)
-      .then(() => {
-        console.log('download successfull');
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-
-
-      // revoke the object url after download by
-        // listening for the downloads.onChanged event
-        // calling URL.revokeObjectURL()
+    updateDownloadButton(fileURL);
   }
 
   // CONTROLLER
@@ -65,13 +53,18 @@ $(() => {
     handleClick();
   })
 
-  $downloadCSV.on('click', (e) => {
-    handleDownloadCSV();
-  })
-
   // VIEW
   function updateCSV(csv) {
     $csv.text(csv);
   }
+
+  function updateDownloadButton(fileURL) {
+    // set that fileURL to be the value of the href attribute on the <a> tag
+    $downloadCSV.attr({ href: fileURL});
+  }
 });
 
+
+// revoke the object url after download by
+  // listening for the downloads.onChanged event
+  // calling URL.revokeObjectURL()
