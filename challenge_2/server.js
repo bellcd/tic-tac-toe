@@ -18,3 +18,8 @@ app.post('/', (req, res, next) => {
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);
 })
+
+
+// TODO:
+  // generate CSV structure from submitted JSON data
+  // respond with that CSV structured data embedded (?) in an html page that also has the form to submit another one
