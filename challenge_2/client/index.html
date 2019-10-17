@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+    <script src="app.js"></script>
   </head>
   <body>
     <!-- TODO: need to add validation to only accept JSON through EITHER the text area OR file upload, not both -->
@@ -14,7 +18,7 @@
         <label for="jsonFile"></label>
         <input type="file" id="jsonFile" name="jsonFile" accept=".json">
       </div>
-      <button type="submit" value="submit">send the data</button>
+      <button type="button" value="submit">send the data</button>
     </form>
   </body>
 </html>
