@@ -4,9 +4,7 @@ function JSONtoCSV (json) {
 
   // series of parallel arrays
   // look at every property in the first level of the JSON, and create an array with those properties
-  // create array csv
   // ['firstName', 'lastName', 'county', 'city', 'role', 'sales', 'children']
-  const columnNames = Object.keys(json);
 
   // create an object with the key names and their indexes in the parallel arrays ie,
     // {

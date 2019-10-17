@@ -1,5 +1,9 @@
 const express = require('express');
 const utilities = require('./utilities.js');
+const multer = require('multer');
+const upload = multer();
+
+// { dest: 'uploads/' }
 
 
 const app = express();
@@ -13,12 +17,22 @@ app.get('/', (req, res, next) => {
   console.log('here');
 });
 
-app.post('/', (req, res, next) => {
-  // console.log('req.body.json_data: ', req.body.json_data);
-  const csv = utilities.JSONtoCSV(req.body.json_data);
+// upload.any()
+
+app.post('/', upload.single('jsonFile'), (req, res, next) => {
+  console.log('req: ', req);
+  console.log('req.file: ', req.file);
+  console.log('req.files: ', req.files);
+  console.log('req.body.jsonText: ', req.body.jsonText);
+  console.log('req.body.jsonFile: ', req.body.jsonFile);
+
+  const json = req.body.jsonFile;
+  const csv = utilities.JSONtoCSV(json);
 
   // console.log('csv: ', csv);
 
+
+  // TODO: change this to use templates instead of repeating the code from index.html
   const html = `<!DOCTYPE html>
   <html>
     <head>
@@ -28,7 +42,7 @@ app.post('/', (req, res, next) => {
       <form action="http://127.0.0.1:3000" method="post">
         <div>
           <label for="json">JSON data</label>
-          <textarea id="json" name="json_data"></textarea>
+          <textarea id="json" name="jsonText"></textarea>
           <button type="submit" value="submit">send the data</button>
         </div>
       </form>

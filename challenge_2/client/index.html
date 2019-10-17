@@ -4,12 +4,16 @@
 
   </head>
   <body>
-    <form action="http://127.0.0.1:3000" method="post">
+    <form action="http://127.0.0.1:3000" method="post" enctype="multipart/form-data">
       <div>
-        <label for="json">JSON data</label>
-        <textarea id="json" name="json_data"></textarea>
-        <button type="submit" value="submit">send the data</button>
+        <label for="jsonText">JSON data</label>
+        <textarea id="jsonText" name="jsonText"></textarea>
       </div>
+      <div>
+        <label for="jsonFile"></label>
+        <input type="file" id="jsonFile" name="jsonFile" accept=".json">
+      </div>
+      <button type="submit" value="submit">send the data</button>
     </form>
   </body>
 </html>
