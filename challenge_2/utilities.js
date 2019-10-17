@@ -14,9 +14,9 @@ function JSONtoCSV (json) {
   };
 
   function recursiveFn(arrayOfPersonElements) {
-    // reduce through array of JSON, can be depth-first
+    // reduce through array of objects, can be depth-first
     return arrayOfPersonElements.reduce((acc, person) => {
-      // remove the children (if any) property from the person element, so we can guarantee to do that step last
+      // remove the children (if any) property from the person element, so we can guarantee to recurse into the children array AFTER we've looked at every other property on this object
       let children;
       if (person.children) {
         children = person.children;
@@ -31,7 +31,7 @@ function JSONtoCSV (json) {
           // declare an index for that property name
           indexOrder[propertyName] = indexOrder.nextIndex;
 
-          // increment counter
+          // increment counter for the next property name to add
           indexOrder.nextIndex = ++indexOrder.nextIndex;
         }
 
@@ -39,13 +39,12 @@ function JSONtoCSV (json) {
         record[indexOrder[propertyName]] = person[propertyName]
       }
 
-      // at this point, record should be an array with the structure of the record we want
+      // at this point, record should be an array in the order of the record we want
       // ie, ['firstName', 'lastName', 'county', 'city', 'role', 'sales']
 
       // add this record to the acc
       let result = acc.concat([record]);
 
-      // if children is NOT undefined,
       // base case
       if (children === undefined) {
         // continue with the next person at this level, if any
@@ -54,7 +53,7 @@ function JSONtoCSV (json) {
       // recursive case
       } else {
         // else, there are children elements we need to recurse through
-        return result.concat(recursiveFn(children)) // TODO: double check that concat is the right method here??
+        return result.concat(recursiveFn(children));
       }
     }, []);
   }
@@ -64,6 +63,7 @@ function JSONtoCSV (json) {
   // make a 'title' row for the csv, ie of column names
   const titleRow = [];
 
+  // populate that title row with the field names from indexOrder
   for (columnName in indexOrder) {
     if (columnName !== 'nextIndex') {
       titleRow[indexOrder[columnName]] = columnName;
@@ -73,15 +73,8 @@ function JSONtoCSV (json) {
   // set titleRow as the first array in records
   records.unshift(titleRow);
 
-
-  // map records to an array of strings
-  const arrayOfStrings = records.map((record) => {
-    return record.join(',');
-  });
-
-  const csv = arrayOfStrings.join('\n');
-  // console.log('csv inside JSONtoCSV: ', csv);
-  return csv;
+  // map records to a comma delimited array of strings, join on \n, and return
+  return records.map((record) => record.join(',')).join('\n');
 }
 
 module.exports.JSONtoCSV = JSONtoCSV;
