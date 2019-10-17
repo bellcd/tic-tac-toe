@@ -40,12 +40,14 @@ app.post('/', upload.single('jsonFile'), (req, res, next) => {
           <label for="jsonFile"></label>
           <input type="file" id="jsonFile" name="jsonFile" accept=".json">
         </div>
-        <button type="submit" value="submit">send the data</button>
+        <button id="form-btn" type="submit" value="submit">send the data through the form</button>
+        <button id="ajax-btn" type="button" value="submit" style="display: none;">send the data with AJAX</button>
+        <p id="csv">${csv}</p>
+        <div id="download-csv-container">
+          <a id="download-csv" href="" download="data.csv">Download CSV</a>
+        </div>
       </form>
-      <p id="csv">${csv}</p>
-      <div id="download-csv-container">
-        <a id="download-csv" href="" download="data.csv">Download CSV</a>
-      </div>
+      <button id="change-btn">Change how to send the data</button>
     </body>
   </html>`
 

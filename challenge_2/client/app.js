@@ -1,9 +1,13 @@
-// TODO: confirm whether we're supposed to create a file on the server and send that file back, OR can we send the csv formatted data back as a string??
+// TODO: confirm whether we're supposed to create a file on the server and send that file back, OR can we send the csv formatted data back as string data??
 
 $(() => {
-  const $btn = $('button');
+  const $ajaxBtn = $('#ajax-btn');
+  const $formBtn = $('#form-btn');
   const $csv = $('#csv');
   const $downloadCSV = $('#download-csv');
+  const $changeBtn = $('#change-btn');
+
+  // const useAJAX = false;
 
   // MODEL
   function handleClick() {
@@ -49,9 +53,14 @@ $(() => {
   }
 
   // CONTROLLER
-  $btn.on('click', (e) => {
+  $ajaxBtn.on('click', (e) => {
     handleClick();
-  })
+  });
+
+  $changeBtn.on('click', (e) => {
+    $ajaxBtn.toggle();
+    $formBtn.toggle();
+  });
 
   // VIEW
   function updateCSV(csv) {
@@ -63,8 +72,3 @@ $(() => {
     $downloadCSV.attr({ href: fileURL});
   }
 });
-
-
-// revoke the object url after download by
-  // listening for the downloads.onChanged event
-  // calling URL.revokeObjectURL()
