@@ -72,7 +72,7 @@ function JSONtoCSV (json) {
     }, []);
   }
 
-  const records = recursiveFn([json]);
+  const records = recursiveFn([JSON.parse(json)]);
 
   // make a 'title' row for the csv, ie of column names
   const titleRow = [];
@@ -93,6 +93,7 @@ function JSONtoCSV (json) {
   });
 
   const csv = arrayOfStrings.join('\n');
+  // console.log('csv inside JSONtoCSV: ', csv);
   return csv;
 }
 
