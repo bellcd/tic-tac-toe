@@ -26,36 +26,8 @@ app.post('/', upload.single('jsonFile'), (req, res, next) => {
   const json = req.body.jsonText === '' ? req.file.buffer.toString() : req.body.jsonText;
   const csv = utilities.JSONtoCSV(json);
 
-  // TODO: change this to use templates instead of repeating the code from index.html
-  let html = `<!DOCTYPE html>
-  <html>
-    <head>
-
-    </head>
-    <body>
-      <form action="http://127.0.0.1:3000" method="post" enctype="multipart/form-data">
-        <div>
-          <label for="jsonText">JSON data</label>
-          <textarea id="jsonText" name="jsonText"></textarea>
-        </div>
-        <div>
-          <label for="jsonFile"></label>
-          <input type="file" id="jsonFile" name="jsonFile" accept=".json">
-        </div>
-        <button id="form-btn" type="submit" value="submit">send the data through the form</button>
-        <button id="ajax-btn" type="button" value="submit" style="display: none;">send the data with AJAX</button>
-        <p id="csv">${csv}</p>
-        <div id="download-csv-container">
-          <a id="download-csv" href="" download="data.csv">Download CSV</a>
-        </div>
-      </form>
-      <button id="change-btn">Change how to send the data</button>
-    </body>
-  </html>`
-
   res.status(200);
   res.render('index', { csv });
-  // TODO: need to adjust this so that #download-csv 's href attr still gets populated with the blob of the file ...
 });
 
 app.post('/json', (req, res, next) => {

@@ -1,6 +1,8 @@
 // TODO: confirm whether we're supposed to create a file on the server and send that file back, OR can we send the csv formatted data back as string data??
 
 $(() => {
+  console.log('inside jquery ready');
+
   const $ajaxBtn = $('#ajax-btn');
   const $formBtn = $('#form-btn');
   const $csv = $('#csv');
@@ -51,6 +53,9 @@ $(() => {
     const fileURL = URL.createObjectURL(file);
     updateDownloadButton(fileURL);
   }
+
+  // invoke createFile on page load , ie, if the user got their data through a form submission
+  createFile($('#csv').text());
 
   // CONTROLLER
   $ajaxBtn.on('click', (e) => {
