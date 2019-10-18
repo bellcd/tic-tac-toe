@@ -21,8 +21,6 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/', upload.single('jsonFile'), (req, res, next) => {
-  console.log('req.body: ', req.body);
-
   const json = req.body.jsonText === '' ? req.file.buffer.toString() : req.body.jsonText;
   const csv = utilities.JSONtoCSV(json);
 
@@ -31,9 +29,6 @@ app.post('/', upload.single('jsonFile'), (req, res, next) => {
 });
 
 app.post('/json', (req, res, next) => {
-  console.log('req: ', req);
-  console.log('req.body: ', req.body);
-
   const csv = utilities.JSONtoCSV(JSON.stringify(req.body));
   res.status(200);
   res.send(csv);
