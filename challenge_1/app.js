@@ -4,8 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // MODEL
   window.game = {
-    player1: 0,
-    player2: 0,
+    players: {
+      whoGoesFirst: 'X',
+      X: {
+        score: 0,
+        name: null,
+        piece: 'X'
+      },
+      O: {
+        score: 0,
+        name: null,
+        piece: 'O'
+      },
+    },
     move: 0,
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
     boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
@@ -49,6 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         return false;
       }
+    },
+    updateScores: function(pieceOfPlayerWhoWon) {
+      if (pieceOfPlayerWhoWon === 'X') {
+        game.players.playerWhoWon = 'X';
+        game.players.X.score++;
+      } else {
+        game.players.playerWhoWon = 'O';
+        game.players.O.score++;
+      }
+      displayNewScores();
     }
   }
 
@@ -72,6 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // change game.move back to 0
     game.move = 0;
+  }
+
+  function displayNewScores() {
+    document.querySelector('#player-one-score').innerHTML = game.players.X.score;
+    document.querySelector('#player-two-score').innerHTML = game.players.O.score;
   }
 
    // CONTROLLER
@@ -120,8 +146,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // TODO: after winning / tie-ing , disable click functionality on tiles
     if (gameIsFinished) {
       // if yes
-        // display relevant message and update scores
+        // display relevant message
       displayMessage(message);
+
+      // and update scores
+      game.updateScores(piece);
     }
   }
 
