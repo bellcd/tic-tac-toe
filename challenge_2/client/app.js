@@ -8,28 +8,37 @@ $(() => {
   const $dragDrop = $('#drag-drop');
 
   let file = null;
+  let useDragDrop = false;
 
   // MODEL
-  function handleClick() {
 
+  function handleDragDrop(e) {
+    e.preventDefault();
+    file = e.dataTransfer.files[0];
+    console.log(e.dataTransfer);
+  }
+
+  function handleClick() {
+    // debugger;
+    const jsonText = $('#jsonText').val();
     // user drag 'n dropped a file
     if (file !== null) {
       makeAjaxRequest(file);
 
     // user typed JSON into the textarea
     } else if (jsonText !== '') {
-      const file = null;
-      const jsonText = $('#jsonText').val();
+
       makeAjaxRequest($(`#jsonText`).val());
 
     // user used the file picker
     } else {
       // get a reference to the File the user uploaded
-      const file = $(`#jsonFile`).get(0).files[0];
+      file = $(`#jsonFile`).get(0).files[0];
 
       // TODO: is it better to process the file into JSON on the client, or send the file to the server as binary data?
       file.text()
       .then((fileAsJSONString) => {
+        // debugger;
         makeAjaxRequest(fileAsJSONString);
       })
       .catch((err) => {
@@ -52,6 +61,7 @@ $(() => {
       data: file,
       processData: false,
       success: (data, status, jqXHR) => {
+        debugger;
         updateCSV(data);
         createFile(data);
         removeFile();
@@ -108,14 +118,14 @@ $(() => {
 
   // TODO: is there a way to handle these with jQuery functions instead of vanilla js?
   // $dragDrop.on('ondrop', (e) => {
-  //   updateDragDrop(e);
+  //   handleDragDrop(e);
   // });
 
   document.querySelector('#drag-drop').addEventListener('dragover', (e) => {
     e.preventDefault(); // TODO: why is preventDefault() on the dragover event necessary to get the event handler on the drop event to fire??
   });
 
-  document.querySelector('#drag-drop').addEventListener('drop', updateDragDrop);
+  document.querySelector('#drag-drop').addEventListener('drop', handleDragDrop);
 
   // VIEW
   function updateCSV(csv) {
@@ -140,11 +150,5 @@ $(() => {
       $deleteDataBtn.attr({ style: `display: inline-block` });
     }
 
-  }
-
-  function updateDragDrop(e) {
-    e.preventDefault();
-    file = e.dataTransfer.files[0];
-    console.log(e.dataTransfer);
   }
 });
