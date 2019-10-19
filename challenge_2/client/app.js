@@ -7,13 +7,22 @@ $(() => {
   const $deleteDataBtn = $('#data-delete-btn');
   const $dragDrop = $('#drag-drop');
 
+  let file = null;
+
   // MODEL
   function handleClick() {
-    const file = null;
-    const jsonText = $('#jsonText').val();
 
-    if (jsonText !== '') {
+    // user drag 'n dropped a file
+    if (file !== null) {
+      makeAjaxRequest(file);
+
+    // user typed JSON into the textarea
+    } else if (jsonText !== '') {
+      const file = null;
+      const jsonText = $('#jsonText').val();
       makeAjaxRequest($(`#jsonText`).val());
+
+    // user used the file picker
     } else {
       // get a reference to the File the user uploaded
       const file = $(`#jsonFile`).get(0).files[0];
@@ -31,6 +40,10 @@ $(() => {
 
   };
 
+  function removeFile() {
+    file = null;
+  }
+
   function makeAjaxRequest(file) {
     $.ajax({
       url: `http://127.0.0.1:3000/json`,
@@ -41,9 +54,11 @@ $(() => {
       success: (data, status, jqXHR) => {
         updateCSV(data);
         createFile(data);
+        removeFile();
       },
       error: (jqXHR, textStatus, error) => {
         console.log(error); // TODO: better error handling
+        removeFile();
       }
     });
   }
@@ -92,17 +107,15 @@ $(() => {
   });
 
   // TODO: is there a way to handle these with jQuery functions instead of vanilla js?
-  $dragDrop.on('ondrop', (e) => {
-    updateDragDrop(e);
-  });
+  // $dragDrop.on('ondrop', (e) => {
+  //   updateDragDrop(e);
+  // });
 
   document.querySelector('#drag-drop').addEventListener('dragover', (e) => {
     e.preventDefault(); // TODO: why is preventDefault() on the dragover event necessary to get the event handler on the drop event to fire??
   });
 
   document.querySelector('#drag-drop').addEventListener('drop', updateDragDrop);
-
-  // document.querySelector('#drag-drop').addEventListener('click', updateDragDrop);
 
   // VIEW
   function updateCSV(csv) {
@@ -131,8 +144,7 @@ $(() => {
 
   function updateDragDrop(e) {
     e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    makeAjaxRequest(file);
+    file = e.dataTransfer.files[0];
     console.log(e.dataTransfer);
   }
 });
