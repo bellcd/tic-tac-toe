@@ -94,10 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function handleReset(e) {
     // remove any HTML content from
-      // each of the .tile's
-    document.querySelectorAll('.tile')
-      .forEach((tile) => {
-        tile.innerHTML = '';
+      // each of the .tile-piece's
+    document.querySelectorAll('.tile-piece')
+      .forEach((tilePiece) => {
+        tilePiece.innerHTML = '';
       });
 
       // the messageDiv
@@ -135,11 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
       game.setTile(row, col, piece);
 
       // update DOM element
-      e.target.innerHTML = piece;
+      e.target.childNodes[0].textContent = piece;
       ++game.move;
     } else {
       return; // because the click happened on a square that already has a piece in it ...
-      // TODO: add popup type thing that informs the user they can't change an alredy placed piece
+      // TODO: add popup type thing that informs the user they can't change an already placed piece
     }
 
     let message;

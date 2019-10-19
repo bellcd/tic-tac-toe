@@ -5,28 +5,34 @@
     <script src="./app.js"></script>
   </head>
   <body>
-    <div class="board">
-      <div class="tile" data-row="0" data-col="0"></div>
-      <div class="tile" data-row="0" data-col="1"></div>
-      <div class="tile" data-row="0" data-col="2"></div>
-      <div class="tile" data-row="1" data-col="0"></div>
-      <div class="tile" data-row="1" data-col="1"></div>
-      <div class="tile" data-row="1" data-col="2"></div>
-      <div class="tile" data-row="2" data-col="0"></div>
-      <div class="tile" data-row="2" data-col="1"></div>
-      <div class="tile" data-row="2" data-col="2"></div>
-    </div>
-    <button id="reset">reset</button>
-    <div class="message"></div>
-    <div class="scores">
-      <div>
-          <span id="name-X"></span>, score: <span id="score-X"></span>
+    <div id="page-wrapper">
+      <div id="content-wrapper">
+        <div id="title"></div>
+        <div id="info">
+          <button id="reset">reset</button>
+          <div class="message"></div>
+          <div class="scores">
+            <span id="name-X"></span>, score: <span id="score-X"></span>
+          </div>
+          <div class="scores">
+            <span id="name-O"></span>, score: <span id="score-O"></span>
+          </div>
+          <div><span id="goes-first"></span> goes next.</div>
+        </div>
+        <div class="board">
+            <div class="tile" data-row="0" data-col="0"><span class="tile-piece"></span></div>
+            <div class="tile" data-row="0" data-col="1"><span class="tile-piece"></span></div>
+            <div class="tile" data-row="0" data-col="2"><span class="tile-piece"></span></div>
+            <div class="tile" data-row="1" data-col="0"><span class="tile-piece"></span></div>
+            <div class="tile" data-row="1" data-col="1"><span class="tile-piece"></span></div>
+            <div class="tile" data-row="1" data-col="2"><span class="tile-piece"></span></div>
+            <div class="tile" data-row="2" data-col="0"><span class="tile-piece"></span></div>
+            <div class="tile" data-row="2" data-col="1"><span class="tile-piece"></span></div>
+            <div class="tile" data-row="2" data-col="2"><span class="tile-piece"></span></div>
+        </div>
+        </div>
       </div>
-      <div>
-        <span id="name-O"></span>, score: <span id="score-O"></span>
-      </div>
     </div>
-    <div><span id="goes-first"></span> goes next.</div>
   </body>
 </html>
 
