@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // MODEL
   window.game = {
     players: {
-      whoGoesFirst: 'X',
+      whoGoesNext: 'X',
       X: {
         score: 0,
         name: null,
@@ -62,13 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     updateScores: function(pieceOfPlayerWhoWon) {
       if (pieceOfPlayerWhoWon === 'X') {
-        game.players.playerWhoWon = 'X';
+        game.players.whoGoesNext = 'X';
         game.players.X.score++;
       } else {
-        game.players.playerWhoWon = 'O';
+        game.players.whoGoesNext = 'O';
         game.players.O.score++;
       }
       displayNewScores();
+      displayWhoGoesNext();
     }
   }
 
@@ -76,10 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
   game.players.X.name = prompt('Player X, enter your name: ');
   game.players.O.name = prompt('Player O, enter your name: ');
   displayNames();
+  displayWhoGoesNext();
 
   // VIEW
   function displayMessage(message) {
     window.messageDiv.innerHTML = message;
+  }
+
+  function displayWhoGoesNext() {
+    document.querySelector('#goes-first').textContent = game.players[game.players.whoGoesNext].name;
   }
 
   function handleReset(e) {
@@ -154,12 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // TODO: after winning / tie-ing , disable click functionality on tiles
     if (gameIsFinished) {
-      // if yes
-        // display relevant message
-      displayMessage(message);
-
-      // and update scores
+      // if yes, update scores
       game.updateScores(piece);
+
+      // TODO: move this to the model?
+      displayMessage(message);
     }
   }
 
