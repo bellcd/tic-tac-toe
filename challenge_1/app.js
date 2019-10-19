@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         piece: 'O'
       },
     },
-    move: 0,
+    nextPiece: 'X',
+    // move: 0,
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
     boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
     getTile: function(row, col) {
@@ -64,20 +65,23 @@ document.addEventListener('DOMContentLoaded', () => {
       if (pieceOfPlayerWhoWon === 'X') {
         game.players.whoGoesNext = 'X';
         game.players.X.score++;
+        game.nextPiece = 'X';
       } else {
         game.players.whoGoesNext = 'O';
         game.players.O.score++;
+        game.nextPiece = 'O';
       }
       displayNewScores();
       displayWhoGoesNext();
+    },
+    alternateNextPiece: function() {
+      if (game.nextPiece === 'X') {
+        game.nextPiece = 'O';
+      } else if (game.nextPiece === 'O') {
+        game.nextPiece = 'X';
+      }
     }
   }
-
-  // TODO: where to put this logic??
-  game.players.X.name = prompt('Player X, enter your name: ');
-  game.players.O.name = prompt('Player O, enter your name: ');
-  displayNames();
-  displayWhoGoesNext();
 
   // VIEW
   function displayMessage(message) {
@@ -119,7 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
    function boardClick(e) {
     const row = e.target.dataset.row;
     const col = e.target.dataset.col;
-    const piece = game.move % 2 === 0 ? 'X' : 'O';
+    // const piece = game.move % 2 === 0 ? 'X' : 'O';
+
+    const piece = game.nextPiece;
+    game.alternateNextPiece();
 
     // looks at the representation of the board
     // if the spot clicked on is null
@@ -168,15 +175,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // event listeners
-  // board
-  window.board = document.querySelector('.board');
-  board.addEventListener('click', boardClick);
+  window.initialize = function() {
+    // TODO: where to put this logic??
+    game.players.X.name = prompt('Player X, enter your name: ');
+    game.players.O.name = prompt('Player O, enter your name: ');
+    displayNames();
+    displayWhoGoesNext();
 
-  // reset button
-  window.resetBtn = document.querySelector('#reset');
-  resetBtn.addEventListener('click', handleReset);
+    // event listeners
+    // board
+    window.board = document.querySelector('.board');
+    board.addEventListener('click', boardClick);
 
-  // message div
-  window.messageDiv = document.querySelector('.message');
+    // reset button
+    window.resetBtn = document.querySelector('#reset');
+    resetBtn.addEventListener('click', handleReset);
+
+    // message div
+    window.messageDiv = document.querySelector('.message');
+  }
+
+  initialize();
 });
