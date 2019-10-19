@@ -1,7 +1,6 @@
 
 // TODO: is this a decent approach to waiting for everything to load before running this script??
 document.addEventListener('DOMContentLoaded', () => {
-
   // MODEL
   window.game = {
     players: {
@@ -73,6 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // TODO: where to put this logic??
+  game.players.X.name = prompt('Player X, enter your name: ');
+  game.players.O.name = prompt('Player O, enter your name: ');
+  displayNames();
+
   // VIEW
   function displayMessage(message) {
     window.messageDiv.innerHTML = message;
@@ -96,8 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function displayNewScores() {
-    document.querySelector('#player-one-score').innerHTML = game.players.X.score;
-    document.querySelector('#player-two-score').innerHTML = game.players.O.score;
+    document.querySelector('#score-X').textContent = game.players.X.score;
+    document.querySelector('#score-O').textContent = game.players.O.score;
+  }
+
+  function displayNames() {
+    document.querySelector('#name-X').textContent = game.players.X.name;
+    document.querySelector('#name-O').textContent = game.players.O.name;
   }
 
    // CONTROLLER
