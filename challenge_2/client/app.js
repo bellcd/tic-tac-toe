@@ -1,5 +1,3 @@
-// TODO: confirm whether we're supposed to create a file on the server and send that file back, OR can we send the csv formatted data back as string data??
-
 $(() => {
   const $ajaxBtn = $('#ajax-btn');
   const $formBtn = $('#form-btn');
@@ -7,6 +5,7 @@ $(() => {
   const $downloadCSV = $('#download-csv');
   const $changeBtn = $('#change-btn');
   const $deleteDataBtn = $('#data-delete-btn');
+  const $dragDrop = $('#drag-drop');
 
   // MODEL
   function handleClick() {
@@ -90,7 +89,20 @@ $(() => {
 
   $deleteDataBtn.on('click', (e) => {
     clearCSV();
-  })
+  });
+
+  // TODO: is there a way to handle these with jQuery functions instead of vanilla js?
+  $dragDrop.on('ondrop', (e) => {
+    updateDragDrop(e);
+  });
+
+  document.querySelector('#drag-drop').addEventListener('dragover', (e) => {
+    e.preventDefault(); // TODO: why is preventDefault() on the dragover event necessary to get the event handler on the drop event to fire??
+  });
+
+  document.querySelector('#drag-drop').addEventListener('drop', updateDragDrop);
+
+  // document.querySelector('#drag-drop').addEventListener('click', updateDragDrop);
 
   // VIEW
   function updateCSV(csv) {
@@ -115,5 +127,12 @@ $(() => {
       $deleteDataBtn.attr({ style: `display: inline-block` });
     }
 
+  }
+
+  function updateDragDrop(e) {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    makeAjaxRequest(file);
+    console.log(e.dataTransfer);
   }
 });
