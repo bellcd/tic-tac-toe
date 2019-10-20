@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     nextPiece: 'X',
     // move: 0,
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
+    rotatedBoardRep: [[null, null, null], [null, null, null], [null, null, null]],
     boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
     getTile: function(row, col) {
       return game.boardRep[row][col];
@@ -88,6 +89,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // rotate the board
+  function boardRepRotation() {
+    debugger;
+    // loop through the array (ie, starting from the bottom rows UP)
+    for (let i = 0; i < 3; i++) {
+      // sort each subArray (so that the null elements will be at the end, which is becoming the top row in a moment...)
+      game.boardRep[i].sort();
+      // loop forwards through each subarray
+      for (let j = 0; j < 3; j++) {
+        // main array index (currently row) -> sub array index (becoming column)
+        // sub array index (currently column) -> main array index (becoming row)
+        game.rotatedBoardRep[Math.abs(j - (game.boardRep[i].length - 1))][i] = game.boardRep[i][j];
+                         // ^^ // should be the absolute value of the sub array index (currently the column) - the last index in the sub array
+      }
+    }
+  }
+
   // VIEW
   function displayMessage() {
     window.messageDiv.innerHTML = game.message;
@@ -142,6 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // update DOM element
       e.target.childNodes[0].textContent = piece;
       ++game.move;
+
+      boardRepRotation();
     } else {
       return; // because the click happened on a square that already has a piece in it ...
       // TODO: add popup type thing that informs the user they can't change an already placed piece
