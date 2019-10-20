@@ -16,6 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
         piece: 'O'
       },
     },
+    message: '',
+    updateMessage(newMessage) {
+      game.message = newMessage;
+      displayMessage();
+    },
     nextPiece: 'X',
     // move: 0,
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
@@ -84,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // VIEW
-  function displayMessage(message) {
-    window.messageDiv.innerHTML = message;
+  function displayMessage() {
+    window.messageDiv.innerHTML = game.message;
   }
 
   function displayWhoGoesNext() {
@@ -147,20 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // TODO: there's definitely a better way to handle this ... far too WET
     // check if someone won OR tied
-    if (game.isRowWin(piece)) {
-      console.log('rowMatch');
-      message = `${piece} wins`;
-      gameIsFinished = true;
-    } else if (game.isColumnWin(piece)) {
-      console.log('columnMatch');
-      message = `${piece} wins`;
-      gameIsFinished = true;
-    } else if (game.isDiagonalWin(piece)) {
-      console.log('diagonalMatch');
-      message = `${piece} wins`;
+    if (game.isRowWin(piece) || game.isColumnWin(piece) || game.isDiagonalWin(piece)) {
+      debugger;
+      message = `${game.players[piece].name} wins`;
       gameIsFinished = true;
     } else if (game.move === 9) {
-      console.log('tied');
       message = `It's a tie`;
       gameIsFinished = true;
     }
@@ -170,8 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // if yes, update scores
       game.updateScores(piece);
 
-      // TODO: move this to the model?
-      displayMessage(message);
+      // update message
+      game.updateMessage(message);
     }
   }
 

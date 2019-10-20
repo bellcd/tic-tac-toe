@@ -31,11 +31,15 @@
 }
 
 .tile {
-  flex: 1 1 200px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  /* TODO: is there a better way to acommplish this? */
+  width: 200px;
+  height: 200px;
+  margin: auto;
 }
 
 .tile-piece {
