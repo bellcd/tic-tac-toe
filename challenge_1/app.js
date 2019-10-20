@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
     rotatedBoardRep: [[null, null, null], [null, null, null], [null, null, null]],
     boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
-
+    useRotation: true,
+    useGravity: true,
     // TODO: there's definitely a better way to do deep copy ...
     copyBoard: function(board) {
       const copy = [];
@@ -141,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }
-      debugger;
       // return afterGravity
       return afterGravity;
     },
@@ -262,6 +262,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function displayGravityButton() {
+    document.querySelector('#gravity-setting').textContent = game.useGravity ? 'On' : 'Off';
+  }
+
+  function displayRotationButton() {
+    document.querySelector('#rotation-setting').textContent = game.useRotation ? 'On' : 'Off';
+  }
+
    // CONTROLLER
    function boardClick(e) {
     const row = e.target.dataset.row;
@@ -269,33 +277,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const piece = game.nextPiece;
     game.alternateNextPiece();
 
-    // looks at the representation of the board
-    // if the spot clicked on is null
+    // looks at the representation of the board, if the spot clicked on is null
     if (game.getTile(row, col) === null) {
       // set spot to either X OR O (depending on what turn we're on)
       game.setTile(row, col, piece);
 
-      // rotate the board rep
-      game.boardRep = game.boardRepRotation(game.boardRep, game.rotatedBoardRep);
-
-      // clear the rotatedBoardRep
-      game.rotatedBoardRep = game.copyBoard(game.boardRepTemplate);
-
       // set the piece in the DOM
       e.target.childNodes[0].textContent = piece;
 
-      // trigger the visual rotation
-      rotateBoard();
+      // TODO: there's probably a better way to handle this if logic ...
+      if (game.useRotation) {
+        // rotate the board rep
+        game.boardRep = game.boardRepRotation(game.boardRep, game.rotatedBoardRep);
 
-      // align the data-* attributes with the new board rotation
-      game.reAssignDataDashAttributes();
+        // clear the rotatedBoardRep
+        game.rotatedBoardRep = game.copyBoard(game.boardRepTemplate);
 
-      // apply gravity to the board rep
-      game.boardRep = game.copyBoard(game.applyGravity(game.boardRep));
+        // trigger the visual rotation
+        rotateBoard();
 
-      // update the DOM with gravity
-      // applyGravityToBoard(); // there's an event listener that listens for 'transitionend', and then fires this method
+        // align the data-* attributes with the new board rotation
+        game.reAssignDataDashAttributes();
+      }
 
+      if (game.useGravity) {
+        // apply gravity to the board rep
+        game.boardRep = game.copyBoard(game.applyGravity(game.boardRep));
+
+        if (game.useRotation === false) {
+          applyGravityToBoard();
+        } else {
+          // there's an event listener that listens for 'transitionend' from the rotation trasform, and then fires this method applyGravityToBoard()
+        }
+      }
       // ALTERNATE METHOD ??
       // // update the DOM to reflect the new rotated board
       // displayRotatedBoard();
@@ -327,6 +341,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function toggleRotation() {
+    game.useRotation = !game.useRotation;
+    displayRotationButton();
+  }
+
+  function toggleGravity() {
+    game.useGravity = !game.useGravity;
+    displayGravityButton();
+  }
+
   window.initialize = function() {
     // TODO: where to put this logic??
     game.players.X.name = prompt('Player X, enter your name: ');
@@ -349,6 +373,9 @@ document.addEventListener('DOMContentLoaded', () => {
     board.addEventListener('transitionend', () => {
       applyGravityToBoard();
     });
+
+    document.querySelector('#gravity').addEventListener('click', toggleGravity);
+    document.querySelector('#rotation').addEventListener('click', toggleRotation);
   }
 
   initialize();
