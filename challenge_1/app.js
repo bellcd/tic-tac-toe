@@ -95,28 +95,28 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (game.nextPiece === 'O') {
         game.nextPiece = 'X';
       }
-    }
-  }
+    },
+    boardRepRotation: function(boardRep, rotatedBoardRep) {
+      const boardRepCopy = game.copyBoard(boardRep)
+      const rotatedBoardRepCopy = game.copyBoard(rotatedBoardRep);
 
-  // rotate the board
-  function boardRepRotation(boardRep, rotatedBoardRep) {
-    const boardRepCopy = game.copyBoard(boardRep)
-    const rotatedBoardRepCopy = game.copyBoard(rotatedBoardRep);
-
-    // loop through the array (ie, starting from the bottom rows UP)
-    for (let i = 0; i < 3; i++) {
-      // sort each subArray (so that the null elements will be at the end, which is becoming the top row in a moment...)
-      // game.boardRep[i].sort(); // TODO: this is wrong. sorting the X's and O's to the left before rotation does not cuase the proper gravity effect ...
-      // loop forwards through each subarray
-      for (let j = 0; j < 3; j++) {
-        // main array index (currently row) -> sub array index (becoming column)
-        // sub array index (currently column) -> main array index (becoming row)
-        rotatedBoardRepCopy[Math.abs(j - (boardRepCopy[i].length - 1))][i] = boardRepCopy[i][j];
-                          // ^^ // should be the absolute value of the sub array index (currently the column) - the last index in the sub array
+      // loop through the array (ie, starting from the bottom rows UP)
+      for (let i = 0; i < 3; i++) {
+        // sort each subArray (so that the null elements will be at the end, which is becoming the top row in a moment...)
+        // game.boardRep[i].sort(); // TODO: this is wrong. sorting the X's and O's to the left before rotation does not cuase the proper gravity effect ...
+        // loop forwards through each subarray
+        for (let j = 0; j < 3; j++) {
+          // main array index (currently row) -> sub array index (becoming column)
+          // sub array index (currently column) -> main array index (becoming row)
+          rotatedBoardRepCopy[Math.abs(j - (boardRepCopy[i].length - 1))][i] = boardRepCopy[i][j];
+                            // ^^ // should be the absolute value of the sub array index (currently the column) - the last index in the sub array
+        }
       }
+      return rotatedBoardRepCopy;
     }
-    return rotatedBoardRepCopy;
   }
+
+
 
   // VIEW
   function displayMessage() {
@@ -142,6 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // change game.move back to 0
     game.move = 0;
+
+    // reset board rotation back to 0
+    document.querySelector('.board').style.transform = '';
   }
 
   function displayNewScores() {
@@ -154,20 +157,36 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#name-O').textContent = game.players.O.name;
   }
 
-  // TODO: this fn is not working properly yet ...
+  // TODO: change this??
   function displayRotatedBoard() {
-    debugger;
     const tiles = document.querySelectorAll('.tile-piece') // TODO: is this guaranteed to return a nodeList in the order these divs appear in the html??
     let count = 0;
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         const piece = game.boardRep[i][j];
+
+        // remove any content that is in the DOM from previous moves
+        tiles[count].textContent = '';
+
+        // place a piece there for this move, if necessary
         if (piece !== null) {
           tiles[count].textContent = piece;
         }
         count++;
       }
+    }
+  }
+
+  function rotateBoard() {
+    const board = document.querySelector('.board');
+    const rotationText = board.style.transform;
+
+    if (rotationText === '') {
+      board.style.transform = `rotate(-90deg)`;
+    } else {
+      const alreadyRotatedAmount = parseInt(rotationText.slice(rotationText.indexOf('(') + 1, -4));
+      board.style.transform = `rotate(${alreadyRotatedAmount + -90}deg)`;
     }
   }
 
@@ -185,11 +204,12 @@ document.addEventListener('DOMContentLoaded', () => {
       game.setTile(row, col, piece);
 
       // rotate the board
-      game.boardRep = boardRepRotation(game.boardRep, game.rotatedBoardRep);
+      game.boardRep = game.boardRepRotation(game.boardRep, game.rotatedBoardRep);
 
       // clear the rotatedBoardRep
       game.rotatedBoardRep = game.copyBoard(game.boardRepTemplate);
 
+      rotateBoard();
       // update the DOM to reflect the new rotated board
       displayRotatedBoard();
     } else {

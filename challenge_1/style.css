@@ -28,6 +28,7 @@
   width: 600px;
   height: 600px;
   background-color: #d0ffd0;
+  transform: rotate(0deg);
 }
 
 .tile {
