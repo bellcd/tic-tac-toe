@@ -1,7 +1,21 @@
+:root {
+  --pink: #F2DFE2;
+  --blue: #568FA6;
+  --orange: #F29D35;
+  --light-red: #BF4904;
+  --dark-red: #8C2B07;
+}
+
+a {
+  color: var(--pink);
+}
+
 html {
   /* background: url(https://source.unsplash.com/eoqnr8ikwFE/); */
   /* background: url(https://source.unsplash.com/FqAmTxJk6Qs/); */
-  background: url(https://source.unsplash.com/ZQprWtq4ZJw/) no-repeat center center fixed;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.5)),
+    url(https://source.unsplash.com/ZQprWtq4ZJw/) no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -13,6 +27,7 @@ html {
   height: 100vh;
   width: 80%;
   margin: 0 auto;
+  color: white;
 }
 
 #content-wrapper {
@@ -35,7 +50,7 @@ html {
   flex-wrap: wrap;
   width: 450px;
   height: 450px;
-  background-color: #d0ffd0;
+  background-color: var(--dark-red);
   transform: rotate(0deg);
   transition: all 1s cubic-bezier(0.83, -0.16, 0.46, 1.47);
   opacity: 0.8;
@@ -63,4 +78,12 @@ html {
 
 .tile:hover {
   background-color: gray;
+}
+
+footer {
+  color: white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  padding: 10px;
 }
