@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
     rotatedBoardRep: [[null, null, null], [null, null, null], [null, null, null]],
     boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
+    // TODO: slice() is not working on the boardReps because they're nested arrays ...
     getTile: function(row, col) {
       return game.boardRep[row][col];
     },
@@ -90,20 +91,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // rotate the board
-  function boardRepRotation() {
-    debugger;
+  function boardRepRotation(boardRep, rotatedBoardRep) {
+    const boardRepCopy = boardRep.slice();
+    const rotatedBoardRepCopy = rotatedBoardRep.slice();
+
     // loop through the array (ie, starting from the bottom rows UP)
     for (let i = 0; i < 3; i++) {
       // sort each subArray (so that the null elements will be at the end, which is becoming the top row in a moment...)
-      game.boardRep[i].sort();
+      // game.boardRep[i].sort(); // TODO: this is wrong. sorting the X's and O's to the left before rotation does not cuase the proper gravity effect ...
       // loop forwards through each subarray
       for (let j = 0; j < 3; j++) {
         // main array index (currently row) -> sub array index (becoming column)
         // sub array index (currently column) -> main array index (becoming row)
-        game.rotatedBoardRep[Math.abs(j - (game.boardRep[i].length - 1))][i] = game.boardRep[i][j];
-                         // ^^ // should be the absolute value of the sub array index (currently the column) - the last index in the sub array
+        rotatedBoardRepCopy[Math.abs(j - (boardRepCopy[i].length - 1))][i] = boardRepCopy[i][j];
+                          // ^^ // should be the absolute value of the sub array index (currently the column) - the last index in the sub array
       }
     }
+    return rotatedBoardRepCopy;
   }
 
   // VIEW
@@ -142,6 +146,22 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#name-O').textContent = game.players.O.name;
   }
 
+  // TODO: this fn is not working properly yet ...
+  function displayRotatedBoard() {
+    const tiles = document.querySelectorAll('.tile-piece') // TODO: is this guaranteed to return a nodeList in the order these divs appear in the html??
+    let count = 0;
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        const piece = game.boardRep[i][j];
+        if (piece !== null) {
+          tiles[count].textContent = piece;
+        }
+        count++;
+      }
+    }
+  }
+
    // CONTROLLER
    function boardClick(e) {
     const row = e.target.dataset.row;
@@ -157,11 +177,21 @@ document.addEventListener('DOMContentLoaded', () => {
       // set spot to either X OR O (depending on what turn we're on)
       game.setTile(row, col, piece);
 
-      // update DOM element
-      e.target.childNodes[0].textContent = piece;
-      ++game.move;
+      // // update DOM element
+      // e.target.childNodes[0].textContent = piece;
+      // ++game.move;
 
-      boardRepRotation();
+      // rotate the board
+      game.boardRep = boardRepRotation(game.boardRep, game.rotatedBoardRep);
+
+      // // replace the boardRep with the rotatedBoardRep
+      // game.boardRep = game.rotatedBoardRep.slice();
+
+      // clear the rotatedBoardRep
+      game.rotatedBoardRep = game.boardRepTemplate.slice()
+
+      // update the DOM to reflect the new rotated board
+      displayRotatedBoard();
     } else {
       return; // because the click happened on a square that already has a piece in it ...
       // TODO: add popup type thing that informs the user they can't change an already placed piece
@@ -173,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // TODO: there's definitely a better way to handle this ... far too WET
     // check if someone won OR tied
     if (game.isRowWin(piece) || game.isColumnWin(piece) || game.isDiagonalWin(piece)) {
-      debugger;
       message = `${game.players[piece].name} wins`;
       gameIsFinished = true;
     } else if (game.move === 9) {
