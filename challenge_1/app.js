@@ -26,7 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
     rotatedBoardRep: [[null, null, null], [null, null, null], [null, null, null]],
     boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
-    // TODO: slice() is not working on the boardReps because they're nested arrays ...
+
+    // TODO: there's definitely a better way to do deep copy ...
+    copyBoard: function(board) {
+      const copy = [];
+      for (let i = 0; i < board.length; i++) {
+        copy[i] = board[i].slice();
+      }
+      return copy;
+    },
     getTile: function(row, col) {
       return game.boardRep[row][col];
     },
@@ -92,8 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // rotate the board
   function boardRepRotation(boardRep, rotatedBoardRep) {
-    const boardRepCopy = boardRep.slice();
-    const rotatedBoardRepCopy = rotatedBoardRep.slice();
+    const boardRepCopy = game.copyBoard(boardRep)
+    const rotatedBoardRepCopy = game.copyBoard(rotatedBoardRep);
 
     // loop through the array (ie, starting from the bottom rows UP)
     for (let i = 0; i < 3; i++) {
@@ -148,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // TODO: this fn is not working properly yet ...
   function displayRotatedBoard() {
+    debugger;
     const tiles = document.querySelectorAll('.tile-piece') // TODO: is this guaranteed to return a nodeList in the order these divs appear in the html??
     let count = 0;
 
@@ -166,8 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
    function boardClick(e) {
     const row = e.target.dataset.row;
     const col = e.target.dataset.col;
-    // const piece = game.move % 2 === 0 ? 'X' : 'O';
-
     const piece = game.nextPiece;
     game.alternateNextPiece();
 
@@ -177,18 +184,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // set spot to either X OR O (depending on what turn we're on)
       game.setTile(row, col, piece);
 
-      // // update DOM element
-      // e.target.childNodes[0].textContent = piece;
-      // ++game.move;
-
       // rotate the board
       game.boardRep = boardRepRotation(game.boardRep, game.rotatedBoardRep);
 
-      // // replace the boardRep with the rotatedBoardRep
-      // game.boardRep = game.rotatedBoardRep.slice();
-
       // clear the rotatedBoardRep
-      game.rotatedBoardRep = game.boardRepTemplate.slice()
+      game.rotatedBoardRep = game.copyBoard(game.boardRepTemplate);
 
       // update the DOM to reflect the new rotated board
       displayRotatedBoard();
