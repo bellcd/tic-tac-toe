@@ -122,9 +122,11 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < 3; i++) {
           let piece = boardRepCopy[i][j];
 
-          // only copy the piece to its spot in columns if it's not null
+          // only copy the piece to its spot in columns if it's not null //
+
+          // only add the piece to columns if it's not null
           if (piece !== null) {
-            columns[j][i] = piece;
+            columns[j].push(piece);
           }
         }
       }
@@ -139,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }
+      debugger;
       // return afterGravity
       return afterGravity;
     },
