@@ -113,6 +113,35 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       return rotatedBoardRepCopy;
     },
+    applyGravity: function(boardRep) {
+      const boardRepCopy = game.copyBoard(boardRep);
+      const columns = [[], [], []];
+      const afterGravity = [[null, null, null], [null, null, null], [null, null, null]];
+      // iterate through the boardRepCopy, column first
+      for (let j = 0; j < 3; j++) {
+        for (let i = 0; i < 3; i++) {
+          let piece = boardRepCopy[i][j];
+
+          // only copy the piece to its spot in columns if it's not null
+          if (piece !== null) {
+            columns[j][i] = piece;
+          }
+        }
+      }
+
+      // walk backwards through afterGravity, column first
+      for (let j = 2; j > -1; j--) {
+        for (let i = 2; i > -1; i--) {
+          // if there are more pieces in this column
+          if (columns[j].length > 0) {
+            // stack them on top of what's already in this column
+            afterGravity[i][j] = columns[j].pop();
+          }
+        }
+      }
+      // return afterGravity
+      return afterGravity;
+    },
     reAssignDataDashAttributes: function() {
       const tiles = document.querySelectorAll('.tile');
       tiles.forEach(tile => {
@@ -214,6 +243,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function applyGravityToBoard() {
+    // TODO: need a CSS way to represent what has an x VS o ...
+    const tiles = document.querySelectorAll('.tile-piece');
+    let count = 0;
+
+    // iterate through the tiles nodeList
+    tiles.forEach(tile => {
+      const row = tile.parentNode.dataset.row;
+      const col = tile.parentNode.dataset.col;
+
+      // access the boardRep array at the position of the dataset attributes on that node
+      // set that piece in the element
+      tile.textContent = game.boardRep[row][col];
+    });
+  }
+
    // CONTROLLER
    function boardClick(e) {
     const row = e.target.dataset.row;
@@ -234,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
       game.rotatedBoardRep = game.copyBoard(game.boardRepTemplate);
 
       // set the piece in the DOM
-      // debugger;
       e.target.childNodes[0].textContent = piece;
 
       // trigger the visual rotation
@@ -242,6 +286,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // align the data-* attributes with the new board rotation
       game.reAssignDataDashAttributes();
+
+      // apply gravity to the board rep
+      game.boardRep = game.copyBoard(game.applyGravity(game.boardRep));
+
+      // update the DOM with gravity
+      // applyGravityToBoard(); // there's an event listener that listens for 'transitionend', and then fires this method
 
       // ALTERNATE METHOD ??
       // // update the DOM to reflect the new rotated board
@@ -292,7 +342,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // message div
     window.messageDiv = document.querySelector('.message');
+
+    board.addEventListener('transitionend', () => {
+      applyGravityToBoard();
+    });
   }
 
   initialize();
+
+
 });
