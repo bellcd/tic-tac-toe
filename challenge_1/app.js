@@ -1,4 +1,3 @@
-
 // TODO: is this a decent approach to waiting for everything to load before running this script??
 document.addEventListener('DOMContentLoaded', () => {
   // MODEL
@@ -103,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // loop through the array (ie, starting from the bottom rows UP)
       for (let i = 0; i < 3; i++) {
         // sort each subArray (so that the null elements will be at the end, which is becoming the top row in a moment...)
-        // game.boardRep[i].sort(); // TODO: this is wrong. sorting the X's and O's to the left before rotation does not cuase the proper gravity effect ...
+        // game.boardRep[i].sort(); // TODO: this is  wrong. sorting the X's and O's to the left before rotation does not cuase the proper gravity effect ...
         // loop forwards through each subarray
         for (let j = 0; j < 3; j++) {
           // main array index (currently row) -> sub array index (becoming column)
@@ -113,10 +112,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       return rotatedBoardRepCopy;
+    },
+    reAssignDataDashAttributes: function() {
+      const tiles = document.querySelectorAll('.tile');
+      tiles.forEach(tile => {
+        // store ____ in temp
+        let temp = tile.dataset.col;
+
+        // set col index equal to current row index
+        tile.dataset.col = tile.dataset.row;
+
+        // set row index equal to Math.abs(col index - ((length of board, ie 3) - 1))
+        tile.dataset.row = Math.abs(temp - 2);
+      });
+    },
+    resetDataDashAttributes: function() {
+      const tiles = document.querySelectorAll('.tile');
+      let count = 0;
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          tiles[count].dataset.row = i;
+          tiles[count].dataset.col = j;
+          count++;
+        }
+      }
     }
   }
-
-
 
   // VIEW
   function displayMessage() {
@@ -145,6 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // reset board rotation back to 0
     document.querySelector('.board').style.transform = '';
+
+    // reset the board DOM data-* to initial values
+    game.resetDataDashAttributes();
   }
 
   function displayNewScores() {
@@ -203,15 +227,25 @@ document.addEventListener('DOMContentLoaded', () => {
       // set spot to either X OR O (depending on what turn we're on)
       game.setTile(row, col, piece);
 
-      // rotate the board
+      // rotate the board rep
       game.boardRep = game.boardRepRotation(game.boardRep, game.rotatedBoardRep);
 
       // clear the rotatedBoardRep
       game.rotatedBoardRep = game.copyBoard(game.boardRepTemplate);
 
+      // set the piece in the DOM
+      // debugger;
+      e.target.childNodes[0].textContent = piece;
+
+      // trigger the visual rotation
       rotateBoard();
-      // update the DOM to reflect the new rotated board
-      displayRotatedBoard();
+
+      // align the data-* attributes with the new board rotation
+      game.reAssignDataDashAttributes();
+
+      // ALTERNATE METHOD ??
+      // // update the DOM to reflect the new rotated board
+      // displayRotatedBoard();
     } else {
       return; // because the click happened on a square that already has a piece in it ...
       // TODO: add popup type thing that informs the user they can't change an already placed piece
