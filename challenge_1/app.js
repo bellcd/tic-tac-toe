@@ -15,15 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
         piece: 'O'
       },
     },
+    move: 0,
     message: '',
     updateMessage(newMessage) {
       game.message = newMessage;
       displayMessage();
     },
     nextPiece: 'X',
-    // move: 0,
     boardRep: [[null, null, null], [null, null, null], [null, null, null]],
-    rotatedBoardRep: [[null, null, null], [null, null, null], [null, null, null]],
     boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
     useRotation: true,
     useGravity: true,
@@ -96,14 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
         game.nextPiece = 'X';
       }
     },
-    boardRepRotation: function(boardRep, rotatedBoardRep) {
-      const boardRepCopy = game.copyBoard(boardRep)
-      const rotatedBoardRepCopy = game.copyBoard(rotatedBoardRep);
+    boardRepRotation: function(boardRep) {
+      const boardRepCopy = game.copyBoard(boardRep);
+      const rotatedBoardRepCopy = [[], [], []];
 
       // loop through the array (ie, starting from the bottom rows UP)
       for (let i = 0; i < 3; i++) {
         // sort each subArray (so that the null elements will be at the end, which is becoming the top row in a moment...)
-        // game.boardRep[i].sort(); // TODO: this is  wrong. sorting the X's and O's to the left before rotation does not cuase the proper gravity effect ...
         // loop forwards through each subarray
         for (let j = 0; j < 3; j++) {
           // main array index (currently row) -> sub array index (becoming column)
@@ -123,8 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < 3; i++) {
           let piece = boardRepCopy[i][j];
 
-          // only copy the piece to its spot in columns if it's not null //
-
           // only add the piece to columns if it's not null
           if (piece !== null) {
             columns[j].push(piece);
@@ -142,13 +138,11 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }
-      // return afterGravity
       return afterGravity;
     },
     reAssignDataDashAttributes: function() {
       const tiles = document.querySelectorAll('.tile');
       tiles.forEach(tile => {
-        // store ____ in temp
         let temp = tile.dataset.col;
 
         // set col index equal to current row index
@@ -213,27 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#name-O').textContent = game.players.O.name;
   }
 
-  // TODO: change this??
-  function displayRotatedBoard() {
-    const tiles = document.querySelectorAll('.tile-piece') // TODO: is this guaranteed to return a nodeList in the order these divs appear in the html??
-    let count = 0;
-
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        const piece = game.boardRep[i][j];
-
-        // remove any content that is in the DOM from previous moves
-        tiles[count].textContent = '';
-
-        // place a piece there for this move, if necessary
-        if (piece !== null) {
-          tiles[count].textContent = piece;
-        }
-        count++;
-      }
-    }
-  }
-
   function rotateBoard() {
     const board = document.querySelector('.board');
     const rotationText = board.style.transform;
@@ -279,6 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // looks at the representation of the board, if the spot clicked on is null
     if (game.getTile(row, col) === null) {
+      // increment move
+      game.move++;
+
       // set spot to either X OR O (depending on what turn we're on)
       game.setTile(row, col, piece);
 
@@ -288,10 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // TODO: there's probably a better way to handle this if logic ...
       if (game.useRotation) {
         // rotate the board rep
-        game.boardRep = game.boardRepRotation(game.boardRep, game.rotatedBoardRep);
-
-        // clear the rotatedBoardRep
-        game.rotatedBoardRep = game.copyBoard(game.boardRepTemplate);
+        game.boardRep = game.boardRepRotation(game.boardRep);
 
         // trigger the visual rotation
         rotateBoard();
@@ -307,12 +280,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (game.useRotation === false) {
           applyGravityToBoard();
         } else {
-          // there's an event listener that listens for 'transitionend' from the rotation trasform, and then fires this method applyGravityToBoard()
+          // there's an event listener that listens for 'transitionend' from the rotation trasform, and then fires the method applyGravityToBoard()
         }
       }
-      // ALTERNATE METHOD ??
-      // // update the DOM to reflect the new rotated board
-      // displayRotatedBoard();
     } else {
       return; // because the click happened on a square that already has a piece in it ...
       // TODO: add popup type thing that informs the user they can't change an already placed piece
@@ -321,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let message;
     let gameIsFinished = false;
 
-    // TODO: there's definitely a better way to handle this ... far too WET
+    // TODO: move this logic to the MODEL, and call the exposed interface
     // check if someone won OR tied
     if (game.isRowWin(piece) || game.isColumnWin(piece) || game.isDiagonalWin(piece)) {
       message = `${game.players[piece].name} wins`;
@@ -379,6 +349,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initialize();
-
-
 });

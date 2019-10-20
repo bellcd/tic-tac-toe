@@ -1,3 +1,10 @@
+html {
+  /* background: url(https://source.unsplash.com/eoqnr8ikwFE/); */
+  /* background: url(https://source.unsplash.com/FqAmTxJk6Qs/); */
+  background: url(https://source.unsplash.com/ZQprWtq4ZJw/) no-repeat center center fixed;
+  background-size: cover;
+}
+
 #page-wrapper {
   display: flex;
   flex-direction: column;
@@ -9,11 +16,12 @@
 }
 
 #content-wrapper {
-  width: 600px;
+  width: 450px;
 }
 
 #title {
-
+  letter-spacing: 5px;
+  font-size: 4rem;
 }
 
 #info {
@@ -25,11 +33,13 @@
 .board {
   display: flex;
   flex-wrap: wrap;
-  width: 600px;
-  height: 600px;
+  width: 450px;
+  height: 450px;
   background-color: #d0ffd0;
   transform: rotate(0deg);
   transition: all 1s cubic-bezier(0.83, -0.16, 0.46, 1.47);
+  opacity: 0.8;
+  box-shadow: inset 10px 10px 6px -4px rgba(0,0,0,0.14);
 }
 
 .tile {
@@ -39,8 +49,8 @@
   justify-content: center;
 
   /* TODO: is there a better way to acommplish this? */
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   margin: auto;
 }
 
