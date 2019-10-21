@@ -167,6 +167,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // VIEW
   function displayMessage() {
+    window.messageDiv.classList.remove('message-hide');
+    // window.messageDiv.classList.add('message-show');
     window.messageDiv.innerHTML = game.message;
   }
 
@@ -183,7 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       // the messageDiv
+      // window.messageDiv.classList.remove('message-show');
+      window.messageDiv.classList.add('message-hide');
       window.messageDiv.innerHTML = '';
+
     // change game.boardRep back to being filled with null
     game.resetBoardRep();
 
