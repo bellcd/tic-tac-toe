@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa:300,400,700&display=swap" rel="stylesheet">
     <link href="./style.css" rel="stylesheet">
     <script src="./app.js"></script>
   </head>
@@ -9,19 +10,13 @@
       <h1 id="title">Tic Tac Toe</h1>
       <div id="content-wrapper">
         <div id="info">
-          <button id="reset">reset</button>
-          <div class="message"></div>
-          <div class="scores">
-            <span id="name-X"></span>, score: <span id="score-X"></span>
+          <div class="scores-container">
+            <span class="names" id="name-X"></span><span class="scores" id="score-X">0</span>
           </div>
-          <div class="scores">
-            <span id="name-O"></span>, score: <span id="score-O"></span>
+          <div class="scores-container">
+            <span class="names" id="name-O"></span><span class="scores" id="score-O">0</span>
           </div>
           <div><span id="goes-first"></span> goes next.</div>
-        </div>
-        <div id="options">
-          <button id="gravity">Gravity <span id='gravity-setting'>On</span></button>
-          <button id="rotation">Rotation <span id="rotation-setting">On</span></button>
         </div>
         <div class="board">
             <div class="tile" data-row="0" data-col="0"><span class="tile-piece"></span></div>
@@ -34,7 +29,13 @@
             <div class="tile" data-row="2" data-col="1"><span class="tile-piece"></span></div>
             <div class="tile" data-row="2" data-col="2"><span class="tile-piece"></span></div>
         </div>
+        <div id="options">
+          <button id="reset">reset</button>
+          <button id="gravity">Gravity <span id='gravity-setting'>On</span></button>
+          <button id="rotation">Rotation <span id="rotation-setting">On</span></button>
+        </div>
       </div>
+      <div class="message"></div>
       <footer>Made with <span role="img" aria-label="heart">❤️</span> by <a href="https://bellcd.github.io/">Christian Bell</a></footer>
     </div>
   </body>
@@ -42,7 +43,6 @@
 
 <!-- TODO:
 change alert popups for player names
-change fonts
 improve button layout ?? -->
 
 
