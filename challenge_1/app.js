@@ -1,4 +1,4 @@
-// TODO: is this a decent approach to waiting for everything to load before running this script??
+// TODO: better approach to waiting for everything to load before running the script
 document.addEventListener('DOMContentLoaded', () => {
   // MODEL
   window.game = {
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const oName = document.querySelector('#name-O-start').value;
       return [xName, oName];
     },
-    // TODO: there's definitely a better way to do deep copy ...
+    // TODO: actual deep copy, instead of one level down ...
     copyBoard: function(board) {
       const copy = [];
       for (let i = 0; i < board.length; i++) {
@@ -115,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // loop through the array (ie, starting from the bottom rows UP)
       for (let i = 0; i < 3; i++) {
-        // sort each subArray (so that the null elements will be at the end, which is becoming the top row in a moment...)
         // loop forwards through each subarray
         for (let j = 0; j < 3; j++) {
           // main array index (currently row) -> sub array index (becoming column)
@@ -351,9 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.initialize = function() {
-    // game.players.X.name = prompt('Player X, enter your name: ');
-    // game.players.O.name = prompt('Player O, enter your name: ');
-
     document.querySelector('#start-button').addEventListener('click', handleStartButtonClick);
 
     // event listeners
