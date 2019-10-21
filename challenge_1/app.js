@@ -85,10 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
         game.players.whoGoesNext = 'X';
         game.players.X.score++;
         game.nextPiece = 'X';
-      } else {
+      } else if (pieceOfPlayerWhoWon === 'O') {
         game.players.whoGoesNext = 'O';
         game.players.O.score++;
         game.nextPiece = 'O';
+      } else {
+        const num = Math.round(Math.random());
+        if (num === 1) {
+          game.players.whoGoesNext = 'X';
+          game.nextPiece = 'X';
+        } else {
+          game.players.whoGoesNext = 'O';
+          game.nextPiece = 'O';
+        }
       }
       displayNewScores();
       displayWhoGoesNext();
@@ -263,10 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
    // CONTROLLER
-   function boardClick(e) {
+  function boardClick(e) {
     const row = e.target.dataset.row;
     const col = e.target.dataset.col;
-    const piece = game.nextPiece;
+    let piece = game.nextPiece;
     game.alternateNextPiece();
 
     // looks at the representation of the board, if the spot clicked on is null
@@ -318,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (game.move === 9) {
       message = `It's a tie`;
       gameIsFinished = true;
+      piece = null;
     }
 
     // TODO: after winning / tie-ing , disable click functionality on tiles
@@ -369,7 +379,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initialize();
 });
 
-
 // TODO:
-  // fix winner incrementing on tie
   // fix shifting on win popup close
