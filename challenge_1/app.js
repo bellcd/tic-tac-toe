@@ -168,8 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // VIEW
   function displayMessage() {
     window.messageDiv.classList.remove('message-hide');
-    // window.messageDiv.classList.add('message-show');
-    window.messageDiv.innerHTML = game.message;
+    document.querySelector('#message').textContent = game.message;
   }
 
   function displayWhoGoesNext() {
@@ -185,9 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       // the messageDiv
-      // window.messageDiv.classList.remove('message-show');
       window.messageDiv.classList.add('message-hide');
-      window.messageDiv.innerHTML = '';
+      // document.querySelector('#message').textContent = '';
 
     // change game.boardRep back to being filled with null
     game.resetBoardRep();
@@ -299,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // TODO: move this logic to the MODEL, and call the exposed interface
     // check if someone won OR tied
     if (game.isRowWin(piece) || game.isColumnWin(piece) || game.isDiagonalWin(piece)) {
-      message = `${game.players[piece].name} wins`;
+      message = `${game.players[piece].name} Wins`;
       gameIsFinished = true;
     } else if (game.move === 9) {
       message = `It's a tie`;
@@ -343,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetBtn.addEventListener('click', handleReset);
 
     // message div
-    window.messageDiv = document.querySelector('.message');
+    window.messageDiv = document.querySelector('.message-container');
 
     board.addEventListener('transitionend', () => {
       applyGravityToBoard();

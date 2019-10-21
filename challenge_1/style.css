@@ -10,6 +10,13 @@ a {
   color: var(--pink);
 }
 
+button {
+  font-family: 'Comfortaa', cursive;
+  font-weight: 700;
+  letter-spacing: 5px;
+  padding: 15px;
+}
+
 html {
   /* background: url(https://source.unsplash.com/eoqnr8ikwFE/); */
   /* background: url(https://source.unsplash.com/FqAmTxJk6Qs/); */
@@ -115,24 +122,23 @@ footer {
   padding: 10px;
 }
 
-.message {
+.message-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
 
-  background-color: green;
-  transition: all 2s;
+  background-color: var(--blue);
+  transform: scale(1.5);
+  transition: all 0.8s;
 }
 
 .message-hide {
-  display: none;
+  transform: scale(0);
 }
 
 .message-show {
@@ -140,4 +146,8 @@ footer {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+#reset {
+  margin-top: 1rem;
 }
