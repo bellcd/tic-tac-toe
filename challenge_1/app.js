@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     boardRepTemplate: [[null, null, null], [null, null, null], [null, null, null]],
     useRotation: true,
     useGravity: true,
+    getPlayerNames: function() {
+      const xName = document.querySelector('#name-X-start').value;
+      const oName = document.querySelector('#name-O-start').value;
+      return [xName, oName];
+    },
     // TODO: there's definitely a better way to do deep copy ...
     copyBoard: function(board) {
       const copy = [];
@@ -246,6 +251,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#rotation-setting').textContent = game.useRotation ? 'On' : 'Off';
   }
 
+  function handleStartButtonClick() {
+    document.querySelector('.page-wrapper').classList.remove('hide');
+    document.querySelector('.splash-div').classList.add('hide');
+
+    const names = game.getPlayerNames();
+    game.players.X.name = names[0];
+    game.players.O.name = names[1];
+    displayNames();
+    displayWhoGoesNext();
+  }
+
    // CONTROLLER
    function boardClick(e) {
     const row = e.target.dataset.row;
@@ -325,11 +341,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.initialize = function() {
-    // TODO: where to put this logic??
-    game.players.X.name = prompt('Player X, enter your name: ');
-    game.players.O.name = prompt('Player O, enter your name: ');
-    displayNames();
-    displayWhoGoesNext();
+    // game.players.X.name = prompt('Player X, enter your name: ');
+    // game.players.O.name = prompt('Player O, enter your name: ');
+
+    document.querySelector('#start-button').addEventListener('click', handleStartButtonClick);
 
     // event listeners
     // board
@@ -353,3 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initialize();
 });
+
+
+// TODO:
+  // fix winner incrementing on tie
+  // fix shifting on win popup close

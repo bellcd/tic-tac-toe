@@ -6,7 +6,21 @@
     <script src="./app.js"></script>
   </head>
   <body>
-    <div id="page-wrapper">
+    <div class="splash-div">
+      <h1 id="title">Tic Tac Toe</h1>
+      <div id="form-container">
+        <div class="form-item">
+          <label for="name-X-start">Player X Name:</label>
+          <input id="name-X-start" type="text" name="name-X-start" required>
+        </div>
+        <div class="form-item">
+          <label for="name-O-start">Player O Name:</label>
+          <input id="name-O-start" type="text" name="name-O-start" required>
+        </div>
+        <button id="start-button">Let's Play!</button>
+      </div>
+    </div>
+    <div class="page-wrapper hide">
       <h1 id="title">Tic Tac Toe</h1>
       <div id="content-wrapper">
         <div id="info">
@@ -45,6 +59,6 @@
 
 <!-- TODO:
 change alert popups for player names
-improve button layout ?? -->
+-->
 
 
