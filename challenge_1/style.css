@@ -1,18 +1,7 @@
-body {
-  margin: 0;
-}
+/* GENERAL STYLES */
+body { margin: 0; }
 
-:root {
-  --pink: #F2DFE2;
-  --blue: #568FA6;
-  --orange: #F29D35;
-  --light-red: #BF4904;
-  --dark-red: #8C2B07;
-}
-
-a {
-  color: var(--pink);
-}
+a { color: var(--pink); }
 
 button {
   font-family: 'Comfortaa', cursive;
@@ -32,6 +21,16 @@ html {
   font-family: 'Comfortaa', cursive;
 }
 
+/* COLOR VARIABLES */
+:root {
+  --pink: #F2DFE2;
+  --blue: #568FA6;
+  --orange: #F29D35;
+  --light-red: #BF4904;
+  --dark-red: #8C2B07;
+}
+
+/* SPLASH SCREEN */
 .splash-div {
   display: flex;
   flex-direction: column;
@@ -69,6 +68,7 @@ label {
   margin-left: 1px;
 }
 
+/* MAIN CONTENT */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -98,6 +98,7 @@ label {
   font-size: 4rem;
 }
 
+/* INFO */
 #info {
   display: flex;
   justify-content: space-evenly;
@@ -121,12 +122,7 @@ label {
   margin: 0 auto;
 }
 
-#options {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
+/* BOARD */
 .board {
   display: flex;
   flex-wrap: wrap;
@@ -157,11 +153,18 @@ label {
   font-size: 2rem;
 }
 
-
 .tile:hover {
   background-color: gray;
 }
 
+/* OPTIONS */
+#options {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+/* FOOTER */
 footer {
   color: white;
   position: fixed;
@@ -170,6 +173,7 @@ footer {
   padding: 10px;
 }
 
+/* MESSAGE POPUP */
 .message-container {
   display: flex;
   flex-direction: column;
@@ -181,19 +185,12 @@ footer {
   height: 100%;
 
   background-color: var(--blue);
-  transform: scale(1.5);
+  transform: scale(1);
   transition: all 0.8s;
 }
 
 .message-hide {
   transform: scale(0);
-}
-
-.message-show {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 #reset {
