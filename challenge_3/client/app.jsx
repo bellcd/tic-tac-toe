@@ -49,6 +49,9 @@ class PageOne extends React.Component {
   }
 }
 
+// TODO: need to add other pages
+// TODO: need to add the other fields of the other pages
+
 const Button = ({ onClick, text, pageNum }) => {
   return (
     <button

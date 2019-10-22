@@ -14,6 +14,7 @@ connection.connect((err) => {
   console.log(`Connected to database as id ${connection.threadId}`)
 });
 
+// TODO: this SQL syntax is not working ...
 function createRecord(name, email, password, callback) {
   connection.query(`INSERT INTO cart (name, email, password) VALUES(${name}, ${email}, ${password})`, (err, results, fields) => {
     if (err) {
@@ -25,5 +26,6 @@ function createRecord(name, email, password, callback) {
 }
 
 module.exports = {
-  connection
+  connection,
+  createRecord
 };

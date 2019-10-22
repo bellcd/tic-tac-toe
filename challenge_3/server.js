@@ -11,12 +11,16 @@ app.post('/page-one', (req, res, next) => {
   console.log('here');
 });
 
+// TODO: need to add other routes for the other pages ...
 app.post('/homepage', (req, res, next) => {
-  ({ name, email, password } = req.body());
+  ({ name, email, password } = req.body);
 
   console.log(name, email, password);
   // create a db record
-  db.createRecord(name, email, password, () => {});
+  db.createRecord(name, email, password, (err, data) => {
+    if (err) { console.log(err); }
+    console.log(data);
+  });
 
   // add name, email, & password fields to that record
   // return the id from that record ??
