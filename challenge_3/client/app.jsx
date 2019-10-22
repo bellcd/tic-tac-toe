@@ -11,7 +11,14 @@ class Homepage extends React.Component {
 
   render() {
     return (
-      <div className={this.props.isActive === true ? '' : 'hide'}>
+      <div className={this.props.activePage === 'Homepage' ? '' : 'hide'}>
+        <InputField
+          inputFieldText={'Name'}
+          inputFieldType={'name'}
+          name={this.props.name}
+          onNameChange={this.props.onNameChange}
+        >
+        </InputField>
         <Button
           onClick={this.props.onClick}
           text={'checkout'}
@@ -30,7 +37,7 @@ class PageOne extends React.Component {
 
   render() {
     return (
-      <div className={this.props.isActive === true ? '' : 'hide'}>
+      <div className={this.props.activePage === 'PageOne' ? '' : 'hide'}>
         <Button
           onClick={this.props.onClick}
           text={'next'}
@@ -53,6 +60,23 @@ const Button = ({ onClick, text, pageNum }) => {
   );
 }
 
+// TODO: is inputFieldType needed??
+const InputField = ({ inputFieldText, inputFieldType, name, onNameChange }) => {
+  console.log(onNameChange);
+  return (
+    <div>
+      <label htmlFor="name">{inputFieldText}</label>
+      <input
+        type="text"
+        name={inputFieldType}
+        value={name}
+        onChange={onNameChange}
+      >
+      </input>
+    </div>
+  );
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -60,24 +84,7 @@ class App extends React.Component {
     // TODO: (the response from the server??) to each button click will change which view is active ...
     this.state = {
       url: `http://localhost:3000`,
-      pages: {
-        activePage: 'homepage',
-        homepage: {
-          isActive: true
-        },
-        pageOne: {
-          isActive: false
-        },
-        pageTwo: {
-          isActive: false
-        },
-        pageThree: {
-          isActive: false
-        },
-        confirmation: {
-          isActive: false
-        }
-      },
+      activePage: 'Homepage',
       name: '',
       email: '',
       password: '',
@@ -95,6 +102,7 @@ class App extends React.Component {
 
     this.handleCheckoutClick = this.handleCheckoutClick.bind(this);
     this.handlePageOneClick = this.handlePageOneClick.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   handleCheckoutClick(e) {
@@ -110,11 +118,11 @@ class App extends React.Component {
         password: this.state.password
       })
     })
+      .then(res => res.json())
       .then(res => {
-        return res.json();
-      })
-      .then(res => {
-        console.log(res);
+        this.setState({
+          activePage: res.activePage
+        })
       })
   }
 
@@ -122,15 +130,23 @@ class App extends React.Component {
 
   }
 
+  handleNameChange(e) {
+    this.setState({
+      name: e.target.value
+    })
+  }
+
   render() {
     return <div>
       <Homepage
-        isActive={this.state.pages.homepage.isActive}
+        activePage={this.state.activePage}
         onClick={this.handleCheckoutClick}
+        name={this.state.name}
+        onNameChange={this.handleNameChange}
       >
       </Homepage>
       <PageOne
-        isActive={this.state.pages.pageOne.isActive}
+        activePage={this.state.activePage}
         onClick={this.handlePageOneClick}
       >
       </PageOne>

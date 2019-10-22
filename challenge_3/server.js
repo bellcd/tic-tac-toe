@@ -1,21 +1,28 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
 app.use(express.static('public'));
-const connection = require('./db.js').connection;
+app.use(bodyParser.json());
+const db = require('./db.js');
 
 app.post('/page-one', (req, res, next) => {
   console.log('here');
 });
 
 app.post('/homepage', (req, res, next) => {
+  ({ name, email, password } = req.body());
+
+  console.log(name, email, password);
   // create a db record
+  db.createRecord(name, email, password, () => {});
+
   // add name, email, & password fields to that record
   // return the id from that record ??
+
   res.send(JSON.stringify({
-    hello: 'hi there!',
-    activePage: 'pageOne'
+    activePage: 'PageOne'
   }));
 });
 
