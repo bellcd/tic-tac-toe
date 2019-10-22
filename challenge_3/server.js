@@ -19,7 +19,6 @@ app.post('/homepage', (req, res, next) => {
   // create a db record
   db.createRecord(name, email, password, (err, data) => {
     if (err) { console.log(err); }
-    console.log(data);
   });
 
   // add name, email, & password fields to that record
@@ -28,6 +27,16 @@ app.post('/homepage', (req, res, next) => {
   res.send(JSON.stringify({
     activePage: 'PageOne'
   }));
+});
+
+// TODO: find a better way to match the user in the db than always sending the email??
+app.post('/page-one', (req, res, next) => {
+  ({ email, address_line_1, address_line_2, city, state, zip_code, phone_num } = req.body);
+
+  // update the db record
+  db.updateRecord({ email }, { address_line_1, address_line_2, city, state, zip_code, phone_num }, (err, data) => {
+    if (err) { console.log(err); }
+  });
 });
 
 app.listen(port, () => { console.log(`App is listening on port ${port}`) });
