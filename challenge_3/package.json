@@ -1,0 +1,21 @@
+{
+  "name": "multistep-checkout-experience",
+  "version": "1.0.0",
+  "description": "This is a demonstration of a multistep checkout flow.",
+  "license": "MIT",
+  "scripts": {
+    "build": "./node_modules/.bin/babel ./client/app.jsx --watch --out-file ./public/app.js",
+    "test": "do thing two",
+    "start": "nodemon ./server.js"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.6.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-react": "^7.6.3",
+    "nodemon": "^1.19.4"
+  }
+}
