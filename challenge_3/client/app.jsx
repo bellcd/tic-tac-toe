@@ -2,13 +2,53 @@
 // const React = require('react');
 // const ReactDOM = require('reactDOM');
 
-const Checkout = ({ onClick }) => {
+// HOMEPAGE
+class Homepage extends React.Component {
+  constructor(props) {
+    super(props);
+
+  }
+
+  render() {
+    return (
+      <div className={this.props.isActive === true ? '' : 'hide'}>
+        <Button
+          onClick={this.props.onClick}
+          text={'checkout'}
+        >
+        </Button>
+      </div>
+    );
+  }
+}
+
+class PageOne extends React.Component {
+  constructor(props) {
+    super(props);
+
+  }
+
+  render() {
+    return (
+      <div className={this.props.isActive === true ? '' : 'hide'}>
+        <Button
+          onClick={this.props.onClick}
+          text={'next'}
+          pageNum={'1'}
+        >
+        </Button>
+      </div>
+    );
+  }
+}
+
+const Button = ({ onClick, text, pageNum }) => {
   return (
     <button
-      id="checkout-button"
+      id={`${pageNum === undefined ? `${text}-` : `page-${pageNum}-`}button`}
       onClick={onClick}
     >
-    Checkout
+    {text}
     </button>
   );
 }
@@ -17,7 +57,27 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    // TODO: (the response from the server??) to each button click will change which view is active ...
     this.state = {
+      url: `http://localhost:3000`,
+      pages: {
+        activePage: 'homepage',
+        homepage: {
+          isActive: true
+        },
+        pageOne: {
+          isActive: false
+        },
+        pageTwo: {
+          isActive: false
+        },
+        pageThree: {
+          isActive: false
+        },
+        confirmation: {
+          isActive: false
+        }
+      },
       name: '',
       email: '',
       password: '',
@@ -33,16 +93,51 @@ class App extends React.Component {
       zip_code_billing: ''
     };
 
-    this.HandleCheckoutClick = this.handleCheckoutClick.bind(this);
+    this.handleCheckoutClick = this.handleCheckoutClick.bind(this);
+    this.handlePageOneClick = this.handlePageOneClick.bind(this);
   }
 
   handleCheckoutClick(e) {
-    console.log(e.target);
+    const url = `${this.state.url}/homepage`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password
+      })
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then(res => {
+        console.log(res);
+      })
+  }
+
+  handlePageOneClick(e) {
+
   }
 
   render() {
     return <div>
-      <Checkout onClick={this.handleCheckoutClick}></Checkout>
+      <Homepage
+        isActive={this.state.pages.homepage.isActive}
+        onClick={this.handleCheckoutClick}
+      >
+      </Homepage>
+      <PageOne
+        isActive={this.state.pages.pageOne.isActive}
+        onClick={this.handlePageOneClick}
+      >
+      </PageOne>
+      {/* TODO: add components for other pages  */}
+      {/* <PageTwo></PageTwo>
+      <PageThree></PageThree>
+      <Confirmation></Confirmation> */}
     </div>
   }
 };
