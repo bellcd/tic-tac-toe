@@ -6,7 +6,6 @@
 class Homepage extends React.Component {
   constructor(props) {
     super(props);
-
   }
 
   render() {
@@ -15,8 +14,22 @@ class Homepage extends React.Component {
         <InputField
           inputFieldText={'Name'}
           inputFieldType={'name'}
-          name={this.props.name}
-          onNameChange={this.props.onNameChange}
+          value={this.props.name}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <InputField
+          inputFieldText={'Email'}
+          inputFieldType={'email'}
+          value={this.props.email}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <InputField
+          inputFieldText={'Password'}
+          inputFieldType={'password'}
+          value={this.props.password}
+          onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
         <Button
@@ -64,16 +77,15 @@ const Button = ({ onClick, text, pageNum }) => {
 }
 
 // TODO: is inputFieldType needed??
-const InputField = ({ inputFieldText, inputFieldType, name, onNameChange }) => {
-  console.log(onNameChange);
+const InputField = ({ inputFieldText, inputFieldType, value, onInputFieldChange }) => {
   return (
     <div>
-      <label htmlFor="name">{inputFieldText}</label>
+      <label htmlFor={inputFieldType}>{inputFieldText}</label>
       <input
         type="text"
         name={inputFieldType}
-        value={name}
-        onChange={onNameChange}
+        value={value}
+        onChange={onInputFieldChange}
       >
       </input>
     </div>
@@ -105,7 +117,7 @@ class App extends React.Component {
 
     this.handleCheckoutClick = this.handleCheckoutClick.bind(this);
     this.handlePageOneClick = this.handlePageOneClick.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleInputFieldChange = this.handleInputFieldChange.bind(this);
   }
 
   handleCheckoutClick(e) {
@@ -133,9 +145,9 @@ class App extends React.Component {
 
   }
 
-  handleNameChange(e) {
+  handleInputFieldChange(e) {
     this.setState({
-      name: e.target.value
+      [e.target.name]: e.target.value
     })
   }
 
@@ -145,7 +157,9 @@ class App extends React.Component {
         activePage={this.state.activePage}
         onClick={this.handleCheckoutClick}
         name={this.state.name}
-        onNameChange={this.handleNameChange}
+        email={this.state.email}
+        password={this.state.password}
+        onInputFieldChange={this.handleInputFieldChange}
       >
       </Homepage>
       <PageOne

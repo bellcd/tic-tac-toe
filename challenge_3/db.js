@@ -16,7 +16,8 @@ connection.connect((err) => {
 
 // TODO: this SQL syntax is not working ...
 function createRecord(name, email, password, callback) {
-  connection.query(`INSERT INTO cart (name, email, password) VALUES(${name}, ${email}, ${password})`, (err, results, fields) => {
+  debugger;
+  connection.query(`INSERT INTO cart(name, email, password) VALUES(?, ?, ?)`, [name, email, password], (err, results, fields) => {
     if (err) {
       callback(err, null);
       return;
