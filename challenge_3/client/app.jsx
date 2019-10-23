@@ -203,7 +203,7 @@ class Confirmation extends React.Component {
       <OrderSummaryField text={'Phone Number'} value={this.props.state.phone_num}></OrderSummaryField>
       <OrderSummaryField text={'Credit Card Number'} value={this.props.state.cc_number}></OrderSummaryField>
       <OrderSummaryField text={'Credit Card Expiration Date'} value={this.props.state.cc_exp}></OrderSummaryField>
-      <OrderSummaryField text={'CCV'} value={this.props.state.ccv}></OrderSummaryField>
+      <OrderSummaryField text={'CCV'} value={this.props.state.cvv}></OrderSummaryField>
       <OrderSummaryField text={'Billing Zip Code'} value={this.props.state.zip_code_billing}></OrderSummaryField>
         <Button
           onClick={this.props.onClick}
@@ -223,13 +223,14 @@ const OrderSummaryField = ({ text, value }) => {
   );
 }
 
-const OrderSummary = () => {
-  return (
-    <div>
+// // TODO: to pretty up the visual presentaton of order summary??
+// const OrderSummary = () => {
+//   return (
+//     <div>
 
-    </div>
-  );
-}
+//     </div>
+//   );
+// }
 
 const Button = ({ onClick, text, pageNum }) => {
   return (
