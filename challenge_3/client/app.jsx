@@ -11,6 +11,24 @@ class Homepage extends React.Component {
   render() {
     return (
       <div className={this.props.activePage === 'Homepage' ? '' : 'hide'}>
+        <Button
+          onClick={this.props.onClick}
+          text={'checkout'}
+        >
+        </Button>
+      </div>
+    );
+  }
+}
+
+class PageOne extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className={this.props.activePage === 'PageOne' ? '' : 'hide'}>
         <InputField
           inputFieldText={'Name'}
           inputFieldType={'name'}
@@ -34,25 +52,6 @@ class Homepage extends React.Component {
         </InputField>
         <Button
           onClick={this.props.onClick}
-          text={'checkout'}
-        >
-        </Button>
-      </div>
-    );
-  }
-}
-
-class PageOne extends React.Component {
-  constructor(props) {
-    super(props);
-
-  }
-
-  render() {
-    return (
-      <div className={this.props.activePage === 'PageOne' ? '' : 'hide'}>
-        <Button
-          onClick={this.props.onClick}
           text={'next'}
           pageNum={'1'}
         >
@@ -62,8 +61,111 @@ class PageOne extends React.Component {
   }
 }
 
-// TODO: need to add other pages
-// TODO: need to add the other fields of the other pages
+class PageTwo extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className={this.props.activePage === 'PageTwo' ? '' : 'hide'}>
+        <InputField
+          inputFieldText={'Address'}
+          inputFieldType={'address_line_1'}
+          value={this.props.address_line_1}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <InputField
+          inputFieldText={'Address (cont)'}
+          inputFieldType={'address_line_2'}
+          value={this.props.address_line_2}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <InputField
+          inputFieldText={'City'}
+          inputFieldType={'city'}
+          value={this.props.city}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <InputField
+          inputFieldText={'State'}
+          inputFieldType={'state'}
+          value={this.props.state}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        <InputField
+          inputFieldText={'Zip Code'}
+          inputFieldType={'zip_code'}
+          value={this.props.zip_code}
+          onInputFieldChange={this.props.onInputFieldChange}
+        ></InputField>
+        <InputField
+          inputFieldText={'Phone Num'}
+          inputFieldType={'phone_num'}
+          value={this.props.phone_num}
+          onInputFieldChange={this.props.onInputFieldChange}
+        ></InputField>
+        </InputField>
+        <Button
+          onClick={this.props.onClick}
+          text={'next'}
+          pageNum={'2'}
+        >
+        </Button>
+      </div>
+    );
+  }
+}
+
+class PageThree extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className={this.props.activePage === 'PageThree' ? '' : 'hide'}>
+        <InputField
+          inputFieldText={'Credit Card Number'}
+          inputFieldType={'cc_number'}
+          value={this.props.cc_number}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <InputField
+          inputFieldText={'Credit Card Expiration Date'}
+          inputFieldType={'cc_exp'}
+          value={this.props.cc_exp}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <InputField
+          inputFieldText={'CVV'}
+          inputFieldType={'cvv'}
+          value={this.props.cvv}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <InputField
+          inputFieldText={'Billing Zip Code'}
+          inputFieldType={'zip_code_billing'}
+          value={this.props.zip_code_billing}
+          onInputFieldChange={this.props.onInputFieldChange}
+        >
+        </InputField>
+        <Button
+          onClick={this.props.onClick}
+          text={'next'}
+          pageNum={'3'}
+        >
+        </Button>
+      </div>
+    );
+  }
+}
 
 const Button = ({ onClick, text, pageNum }) => {
   return (
