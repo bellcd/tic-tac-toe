@@ -35,8 +35,16 @@ app.post('/page-one', (req, res, next) => {
 // TODO: find a better way to match the user in the db than always sending the email??
 app.post('/page-two', (req, res, next) => {
   ({ email, address_line_1, address_line_2, city, state, zip_code, phone_num } = req.body);
+  console.log('email: ', email);
 
-  // update the db record
+  console.log('address_line_1: ', address_line_1);
+  console.log('address_line_2: ', address_line_2);
+  console.log('city: ', city);
+  console.log('state: ', state);
+  console.log('zip_code: ', zip_code);
+  console.log('phone_num: ', phone_num);
+
+  // update the db recordselec
   db.updateRecord({ email }, { address_line_1, address_line_2, city, state, zip_code, phone_num }, (err, data) => {
     if (err) { console.log(err); }
 

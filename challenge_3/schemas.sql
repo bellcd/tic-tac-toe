@@ -15,7 +15,7 @@ CREATE TABLE cart (
   zip_code INT,
   phone_num VARCHAR(255),
   cc_number INT,
-  cc_exp DATE,
+  cc_exp VARCHAR(255), -- TODO: change this to a date value??
   cvv INT,
   zip_code_billing INT,
 

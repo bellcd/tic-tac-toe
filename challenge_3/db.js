@@ -57,6 +57,8 @@ function updateRecord(fieldToMatchOnObject, fieldsToUpdateObject, callback) {
 
   const query = `UPDATE cart SET ${assignments.join(', ')} WHERE ${field} = '${value}'`;
 
+  console.log('query: ', query);
+
   connection.query(query, (err, results, fields) => {
     if (err) {
       callback(err, null);

@@ -96,18 +96,20 @@ class PageTwo extends React.Component {
           value={this.props.state}
           onInputFieldChange={this.props.onInputFieldChange}
         >
+        </InputField>
         <InputField
           inputFieldText={'Zip Code'}
           inputFieldType={'zip_code'}
           value={this.props.zip_code}
           onInputFieldChange={this.props.onInputFieldChange}
-        ></InputField>
+        >
+        </InputField>
         <InputField
           inputFieldText={'Phone Num'}
           inputFieldType={'phone_num'}
           value={this.props.phone_num}
           onInputFieldChange={this.props.onInputFieldChange}
-        ></InputField>
+        >
         </InputField>
         <Button
           onClick={this.props.onClick}
@@ -260,7 +262,7 @@ class App extends React.Component {
   handlePageTwoClick(e) {
     const url = `${this.state.url}/page-two`;
     const data = {
-      name: this.state.name,
+      email: this.state.email,
       address_line_1: this.state.address_line_1,
       address_line_2: this.state.address_line_2,
       city: this.state.city,
@@ -275,7 +277,7 @@ class App extends React.Component {
   handlePageThreeClick(e) {
     const url = `${this.state.url}/page-three`;
     const data = {
-      name: this.state.name,
+      email: this.state.email,
       cc_number: this.state.cc_number,
       cc_exp: this.state.cc_exp,
       cvv: this.state.cvv,
