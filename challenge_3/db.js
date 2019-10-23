@@ -68,8 +68,27 @@ function updateRecord(fieldToMatchOnObject, fieldsToUpdateObject, callback) {
   })
 }
 
+function selectRecord(fieldToMatchObject, callback) {
+  console.log('fieldToMatchObject: ', fieldToMatchObject);
+
+  const entry = Object.entries(fieldToMatchObject)[0];
+  const field = entry[0];
+  const value = entry[1];
+
+  const query = `SELECT * FROM cart WHERE ${field}='${value}'`;
+  connection.query(query, (err, results, fields) => {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+
+    callback(null, results);
+  });
+}
+
 module.exports = {
   connection,
   createRecord,
-  updateRecord
+  updateRecord,
+  selectRecord
 };

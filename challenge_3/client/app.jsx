@@ -169,6 +169,68 @@ class PageThree extends React.Component {
   }
 }
 
+class Confirmation extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  // ComponentDidUpdate(prevProps) {
+  //   const url = `http://localhost:3000`;
+  //   fetch(url, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   })
+
+  //   .then(res => res.json())
+  //   .then(res => {
+
+  //   })
+  // }
+
+  render() {
+    return (
+      <div className={this.props.activePage === 'Confirmation' ? '' : 'hide'}>
+
+      <OrderSummaryField text={'Name'} value={this.props.state.name}></OrderSummaryField>
+      <OrderSummaryField text={'Email'} value={this.props.state.email}></OrderSummaryField>
+      <OrderSummaryField text={'Address'} value={this.props.state.address_line_1}></OrderSummaryField>
+      <OrderSummaryField text={'Address (cont)'} value={this.props.state.address_line_2}></OrderSummaryField>
+      <OrderSummaryField text={'City'} value={this.props.state.city}></OrderSummaryField>
+      <OrderSummaryField text={'State'} value={this.props.state.state}></OrderSummaryField>
+      <OrderSummaryField text={'Zip Code'} value={this.props.state.zip_code}></OrderSummaryField>
+      <OrderSummaryField text={'Phone Number'} value={this.props.state.phone_num}></OrderSummaryField>
+      <OrderSummaryField text={'Credit Card Number'} value={this.props.state.cc_number}></OrderSummaryField>
+      <OrderSummaryField text={'Credit Card Expiration Date'} value={this.props.state.cc_exp}></OrderSummaryField>
+      <OrderSummaryField text={'CCV'} value={this.props.state.ccv}></OrderSummaryField>
+      <OrderSummaryField text={'Billing Zip Code'} value={this.props.state.zip_code_billing}></OrderSummaryField>
+        <Button
+          onClick={this.props.onClick}
+          text={'purchase'}
+        >
+        </Button>
+      </div>
+    );
+  }
+}
+
+const OrderSummaryField = ({ text, value }) => {
+  return (
+    <div>
+      {`${text}: ${value}`}
+    </div>
+  );
+}
+
+const OrderSummary = () => {
+  return (
+    <div>
+
+    </div>
+  );
+}
+
 const Button = ({ onClick, text, pageNum }) => {
   return (
     <button
@@ -180,7 +242,6 @@ const Button = ({ onClick, text, pageNum }) => {
   );
 }
 
-// TODO: is inputFieldType needed??
 const InputField = ({ inputFieldText, inputFieldType, value, onInputFieldChange }) => {
   return (
     <div>
@@ -223,6 +284,7 @@ class App extends React.Component {
     this.handlePageOneClick = this.handlePageOneClick.bind(this);
     this.handlePageTwoClick = this.handlePageTwoClick.bind(this);
     this.handlePageThreeClick = this.handlePageThreeClick.bind(this);
+    this.handleConfirmationClick = this.handleConfirmationClick.bind(this);
     this.handleInputFieldChange = this.handleInputFieldChange.bind(this);
   }
 
@@ -287,6 +349,12 @@ class App extends React.Component {
     this.invokeFetch(url, data);
   }
 
+  handleConfirmationClick(e) {
+    this.setState({
+      activePage: 'Homepage'
+    });
+  }
+
   handleInputFieldChange(e) {
     this.setState({
       [e.target.name]: e.target.value
@@ -332,7 +400,12 @@ class App extends React.Component {
         zip_code_billing={this.state.zip_code_billing}
         >
         </PageThree>
-      {/* <Confirmation></Confirmation> */}
+      <Confirmation
+        activePage={this.state.activePage}
+        onClick={this.handleConfirmationClick}
+        state={this.state}
+      >
+      </Confirmation>
     </div>
   }
 };

@@ -67,4 +67,18 @@ app.post('/page-three', (req, res, next) => {
   });
 });
 
+app.get('/cart', (req, res, next) => {
+  ({ email } = req.body);
+
+  db.selectRecord({ email }, (err, data) => {
+    if (err) { console.log(err); }
+
+    console.log('data: ', data);
+
+    res.send(JSON.stringify({
+      data
+    }));
+  })
+});
+
 app.listen(port, () => { console.log(`App is listening on port ${port}`) });
