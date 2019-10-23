@@ -10,6 +10,9 @@ class Homepage extends React.Component {
 
   render() {
     return (
+      // TODO: change these components to use some form of conditional rendering
+        // return null from within the actual components?
+        // or perhaps do the conditional rendering at the <App> component level?
       <div className={this.props.activePage === 'Homepage' ? '' : 'hide'}>
         <Button
           onClick={this.props.onClick}
