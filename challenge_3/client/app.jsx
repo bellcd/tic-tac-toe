@@ -219,32 +219,70 @@ class App extends React.Component {
 
     this.handleCheckoutClick = this.handleCheckoutClick.bind(this);
     this.handlePageOneClick = this.handlePageOneClick.bind(this);
+    this.handlePageTwoClick = this.handlePageTwoClick.bind(this);
+    this.handlePageThreeClick = this.handlePageThreeClick.bind(this);
     this.handleInputFieldChange = this.handleInputFieldChange.bind(this);
   }
 
-  handleCheckoutClick(e) {
-    const url = `${this.state.url}/homepage`;
+  invokeFetch(url, data) {
     fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password
-      })
+      body: JSON.stringify(data)
     })
       .then(res => res.json())
       .then(res => {
         this.setState({
           activePage: res.activePage
         })
-      })
+      });
+  }
+
+  handleCheckoutClick(e) {
+    const url = `${this.state.url}/homepage`;
+    const data = {}
+    this.invokeFetch(url, data)
   }
 
   handlePageOneClick(e) {
+    const url = `${this.state.url}/page-one`;
+    const data = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password
+    }
 
+    this.invokeFetch(url, data);
+  }
+
+  handlePageTwoClick(e) {
+    const url = `${this.state.url}/page-two`;
+    const data = {
+      name: this.state.name,
+      address_line_1: this.state.address_line_1,
+      address_line_2: this.state.address_line_2,
+      city: this.state.city,
+      state: this.state.state,
+      zip_code: this.state.zip_code,
+      phone_num: this.state.phone_num
+    }
+
+    this.invokeFetch(url, data);
+  }
+
+  handlePageThreeClick(e) {
+    const url = `${this.state.url}/page-three`;
+    const data = {
+      name: this.state.name,
+      cc_number: this.state.cc_number,
+      cc_exp: this.state.cc_exp,
+      cvv: this.state.cvv,
+      zip_code_billing: this.state.zip_code_billing
+    }
+
+    this.invokeFetch(url, data);
   }
 
   handleInputFieldChange(e) {
@@ -258,21 +296,41 @@ class App extends React.Component {
       <Homepage
         activePage={this.state.activePage}
         onClick={this.handleCheckoutClick}
-        name={this.state.name}
-        email={this.state.email}
-        password={this.state.password}
         onInputFieldChange={this.handleInputFieldChange}
       >
       </Homepage>
       <PageOne
         activePage={this.state.activePage}
         onClick={this.handlePageOneClick}
+        onInputFieldChange={this.handleInputFieldChange}
+        name={this.state.name}
+        email={this.state.email}
+        password={this.state.password}
       >
       </PageOne>
-      {/* TODO: add components for other pages  */}
-      {/* <PageTwo></PageTwo>
-      <PageThree></PageThree>
-      <Confirmation></Confirmation> */}
+      <PageTwo
+        activePage={this.state.activePage}
+        onClick={this.handlePageTwoClick}
+        onInputFieldChange={this.handleInputFieldChange}
+        address_line_1={this.state.address_line_1}
+        address_line_2={this.state.address_line_2}
+        city={this.state.city}
+        state={this.state.state}
+        zip_code={this.state.zip_code}
+        phone_num={this.state.phone_num}
+      >
+      </PageTwo>
+      <PageThree
+        activePage={this.state.activePage}
+        onClick={this.handlePageThreeClick}
+        onInputFieldChange={this.handleInputFieldChange}
+        cc_number={this.state.cc_number}
+        cc_exp={this.state.cc_exp}
+        cvv={this.state.cvv}
+        zip_code_billing={this.state.zip_code_billing}
+        >
+        </PageThree>
+      {/* <Confirmation></Confirmation> */}
     </div>
   }
 };
