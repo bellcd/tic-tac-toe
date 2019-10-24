@@ -1,9 +1,10 @@
 const React = require('react');
+const Disc = require('./disc.jsx');
 
 const Grid = ({ gridRep, onClick }) => {
-  const gridElement = gridRep.map((col) => {
-    return col.map((disc, index) => {
-      return <Disc key={index} disc={disc} onClick={onClick}></Disc>
+  const gridElement = gridRep.map((row, y) => {
+    return row.map((disc, x) => {
+      return <Disc key={`${x},${y}`} disc={disc} x={x} y={y} onClick={onClick}></Disc>
     })
   });
 
