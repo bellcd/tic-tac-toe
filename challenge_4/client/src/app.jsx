@@ -31,23 +31,41 @@ class App extends React.Component {
   }
 
   hasRowWin(grid) {
-    const gridCopy = grid.slice(); // is this safe?? making a copy of the parent array with the same references to subarrys ...
+    const gridCopy = grid.slice(); // safe?? only a shallow copy ...
     gridCopy.reverse();
 
     return gridCopy.some(row => {
-      return this.isRowWin(row);
+      return this.isLineWin(row);
     });
   }
 
-  isRowWin(row) {
+  hasColWin(grid) {
+    const gridCopy = grid.slice(); // safe? only a shallow copy ...
+
+    let col = [];
+    for (let j = 0; j < 7; j++) {
+      col = [];
+      for (let i = 0; i < 6; i++) {
+        col.push(gridCopy[i][j]);
+      }
+
+      if (this.isLineWin(col)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  isLineWin(line) {
     let isWin = [];
 
-    for (let i = 0; i < row.length; i++) {
+    for (let i = 0; i < line.length; i++) {
       if (isWin.length === 4) {
         return true;
       }
 
-      let val = row[i];
+      let val = line[i];
       let winning = isWin[0];
 
       if (val !== null && val === winning) {
@@ -116,6 +134,8 @@ class App extends React.Component {
       console.log(`It's a tie!`);
     } else if (this.hasRowWin(this.state.gridRep)) {
       console.log(`There's a row win`);
+    } else if (this.hasColWin(this.state.gridRep)) {
+      console.log(`There's a col win`);
     }
   }
 
