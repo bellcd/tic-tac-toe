@@ -8,21 +8,31 @@ class App extends React.Component {
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
-      // each subarray is a column
+      // each subarray is a row
       // 0 is red, 1 is yellow
-      gridRep: [
-        [0, 0, 0, 1, 1, 1, 0],
-        [0, 0, 0, 1, 1, 1, 0],
-        [0, 0, 0, 1, 1, 1, 0],
-        [0, 0, 0, 1, 1, 1, 0],
-        [0, 0, 0, 1, 1, 1, 0],
-        [0, 0, 0, 1, 1, 1, 0]
+      gridRep: [ // there's probably a better way to set every as null to begin with ...
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null]
+      ],
+      gridRepTemplate: [
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null]
       ]
     }
   }
 
-  handleClick() {
-    console.log('new click')
+  handleClick(e, x, y) {
+    debugger;
+    console.log(e);
+
   }
 
   render() {
