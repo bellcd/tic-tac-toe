@@ -225,7 +225,29 @@ eval("\n\nif (false) {} else {\n  module.exports = __webpack_require__(/*! ./cjs
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nconst ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nconst Test = () => {\n  return React.createElement(\"div\", null, \"here is something\");\n};\n\nReactDOM.render(React.createElement(Test, null), document.querySelector('#root'));\n\n//# sourceURL=webpack:///./public/app.js?");
+eval("const React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nconst ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nconst Grid = __webpack_require__(/*! ./grid.js */ \"./public/grid.js\");\n\nclass App extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {\n      // each subarray is a column\n      // 0 is red, 1 is yellow\n      gridRep: [[0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1]]\n    };\n  }\n\n  render() {\n    return React.createElement(Grid, {\n      gridRep: this.state.gridRep\n    });\n  }\n\n}\n\nReactDOM.render(React.createElement(App, null), document.querySelector('#root'));\n\n//# sourceURL=webpack:///./public/app.js?");
+
+/***/ }),
+
+/***/ "./public/disc.js":
+/*!************************!*\
+  !*** ./public/disc.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nconst Disc = ({\n  disc\n}) => {\n  return React.createElement(\"div\", {\n    id: \"disc\"\n  }, React.createElement(\"div\", {\n    id: \"disc-value\"\n  }, disc));\n};\n\nmodule.exports = Disc;\n\n//# sourceURL=webpack:///./public/disc.js?");
+
+/***/ }),
+
+/***/ "./public/grid.js":
+/*!************************!*\
+  !*** ./public/grid.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nconst Disc = __webpack_require__(/*! ./disc.js */ \"./public/disc.js\");\n\nconst Grid = ({\n  gridRep\n}) => {\n  const gridElement = gridRep.map(col => {\n    return col.map((disc, index) => {\n      return React.createElement(Disc, {\n        key: index,\n        disc: disc\n      });\n    });\n  });\n  return React.createElement(\"div\", {\n    id: \"grid\"\n  }, gridElement);\n};\n\nmodule.exports = Grid;\n\n//# sourceURL=webpack:///./public/grid.js?");
 
 /***/ })
 
