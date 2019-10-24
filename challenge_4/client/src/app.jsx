@@ -30,8 +30,48 @@ class App extends React.Component {
     }
   }
 
+  hasRowWin(grid) {
+    const gridCopy = grid.slice(); // is this safe?? making a copy of the parent array with the same references to subarrys ...
+    gridCopy.reverse();
+
+    return gridCopy.some(row => {
+      return this.isRowWin(row);
+    });
+  }
+
+  isRowWin(row) {
+    const isWin = [row[0]];
+
+    for (let i = 1; i < row.length; i++) {
+      if (isWin.length === 4) {
+        return true;
+      }
+
+      let val = row[i];
+      let last = isWin[isWin.length - 1];
+      if (val !== null && val === last) {
+        isWin.push(val);
+      } else if (val !== null) {
+        isWin[isWin.length - 1] = val;
+      } else {
+        // do nothing, that spot has null in it
+      }
+    }
+
+    if (isWin.length === 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   handleClick(e, x, y) {
-    this.setDisc(x, y);
+    // TODO: probably better to check the gridRep to see if that spot is empty, rather than in the event ...
+    if (e.target.childNodes.length === 0) {
+      this.setDisc(x, y);
+    } else {
+      // there's already a disc in this spot, so ignore the click
+    }
   }
 
   // TODO: there's probably a better way to do this ...
@@ -50,8 +90,6 @@ class App extends React.Component {
     }
   }
 
-  // TODO: need to check if count is at max
-
   setDisc(x, y) {
     this.setState((state, props) => {
       // determine whose turn it is
@@ -68,6 +106,20 @@ class App extends React.Component {
         count: ++state.count
       }
     });
+  }
+
+  // TODO: check for opposite conditions? how many nulls are in each line??
+  checkForWin() {
+    if (this.state.count === 42) {
+      console.log(`It's a tie!`);
+    } else if (this.hasRowWin(this.state.gridRep)) {
+      console.log(`There's a row win`);
+    }
+  }
+
+
+  componentDidUpdate() {
+    this.checkForWin(this.state.gridRep);
   }
 
   render() {
