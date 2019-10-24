@@ -40,21 +40,23 @@ class App extends React.Component {
   }
 
   isRowWin(row) {
-    const isWin = [row[0]];
+    let isWin = [];
 
-    for (let i = 1; i < row.length; i++) {
+    for (let i = 0; i < row.length; i++) {
       if (isWin.length === 4) {
         return true;
       }
 
       let val = row[i];
-      let last = isWin[isWin.length - 1];
-      if (val !== null && val === last) {
+      let winning = isWin[0];
+
+      if (val !== null && val === winning) {
         isWin.push(val);
       } else if (val !== null) {
-        isWin[isWin.length - 1] = val;
+        isWin = [val];
       } else {
-        // do nothing, that spot has null in it
+        isWin = [];
+        // that spot has null in it, so a winning streak needs to start from the next spot (if any)
       }
     }
 
