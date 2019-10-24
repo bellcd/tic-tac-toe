@@ -1,10 +1,12 @@
 const React = require('react');
 
 const Disc = ({
-  disc
+  disc,
+  onClick
 }) => {
   return React.createElement("div", {
-    id: "disc"
+    id: "disc",
+    onClick: onClick
   }, React.createElement("div", {
     id: "disc-value"
   }, disc));

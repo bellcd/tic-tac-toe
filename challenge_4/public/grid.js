@@ -3,13 +3,15 @@ const React = require('react');
 const Disc = require('./disc.js');
 
 const Grid = ({
-  gridRep
+  gridRep,
+  onClick
 }) => {
   const gridElement = gridRep.map(col => {
     return col.map((disc, index) => {
       return React.createElement(Disc, {
         key: index,
-        disc: disc
+        disc: disc,
+        onClick: onClick
       });
     });
   });
@@ -19,3 +21,5 @@ const Grid = ({
 };
 
 module.exports = Grid;
+console.log('h1');
+console.log('h1');

@@ -1,10 +1,11 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-const Grid = require('./grid.js');
+const Grid = require('./components/grid.jsx');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
       // each subarray is a column
@@ -21,12 +22,18 @@ class App extends React.Component {
     }
   }
 
+  handleClick() {
+    console.log('new click')
+  }
+
   render() {
     return (
-      <Grid gridRep={this.state.gridRep}></Grid>
+      <Grid gridRep={this.state.gridRep} onClick={this.handleClick}></Grid>
     );
   }
 }
 
 ReactDOM.render(<App></App>, document.querySelector('#root'));
 
+console.log('hello')
+console.log('hello')

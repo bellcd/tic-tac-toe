@@ -1,11 +1,25 @@
 const path = require('path');
 
-// TODO: add babel through a loader in webpack, instead of directly ...
 module.exports = {
-  entry: "./public/app.js",
+  entry: path.resolve(__dirname, "client/src/app.jsx"),
   output: {
-    filename: "main.js",
-    path: path.resolve(__dirname, 'dist')
+    filename: "bundle.js",
+    path: path.resolve(__dirname, 'client/dist')
   },
-  mode: "development"
+  module: {
+    rules: [
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
+    ]
+  },
+  mode: "development",
+  watch: true,
+  watchOptions: {
+    ignored: /node_modules/,
+  }
 }

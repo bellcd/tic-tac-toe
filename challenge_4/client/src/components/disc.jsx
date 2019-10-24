@@ -1,8 +1,8 @@
 const React = require('react');
 
-const Disc = ({ disc }) => {
+const Disc = ({ disc, onClick }) => {
   return (
-    <div id="disc">
+    <div id="disc" onClick={onClick}>
       <div id="disc-value">{disc}</div>
     </div>
   );
