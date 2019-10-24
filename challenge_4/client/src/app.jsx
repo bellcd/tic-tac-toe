@@ -8,6 +8,7 @@ class App extends React.Component {
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
+      message: '',
       count: 0, // TODO: better way to keep track of count??
       // each subarray is a row
       // 0 is red, 1 is yellow
@@ -28,6 +29,12 @@ class App extends React.Component {
         [null, null, null, null, null, null, null]
       ]
     }
+  }
+
+  updateMessage(message) {
+    this.setState({
+      message: message
+    });
   }
 
   hasRowWin(grid) {
@@ -218,25 +225,34 @@ class App extends React.Component {
 
   // TODO: check for opposite conditions? how many nulls are in each line??
   checkForWin() {
+    let message;
     if (this.state.count === 42) {
-      console.log(`It's a tie!`);
+      message = `It's a tie!`;
     } else if (this.hasRowWin(this.state.gridRep)) {
-      console.log(`There's a row win`);
+      message = `There's a row win`;
     } else if (this.hasColWin(this.state.gridRep)) {
-      console.log(`There's a col win`);
+      message = `There's a column win`;
     } else if (this.hasDiagonalWin(this.state.gridRep)) {
-      console.log(`There's a diagonal win`);
+      message = `There's a diagonal win`;
+    }
+
+    if (message) {
+      this.updateMessage(message);
     }
   }
 
-
   componentDidUpdate() {
-    this.checkForWin(this.state.gridRep);
+    if (this.state.message === '') {
+      this.checkForWin(this.state.gridRep);
+    }
   }
 
   render() {
     return (
-      <Grid gridRep={this.state.gridRep} onClick={this.handleClick}></Grid>
+      <>
+        <Grid gridRep={this.state.gridRep} onClick={this.handleClick}></Grid>
+        <div>{this.state.message}</div>
+      </>
     );
   }
 }
