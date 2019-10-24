@@ -4,7 +4,7 @@
   "description": "An implementation of the game connect four",
   "private": true,
   "scripts": {
-    "build": "./node_modules/.bin/babel client --out-dir public",
+    "build": "babel client --out-dir public & webpack",
     "test": "test",
     "start": "nodemon server.js"
   },
@@ -19,6 +19,8 @@
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0"
   }
 }
