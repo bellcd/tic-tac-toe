@@ -9,6 +9,7 @@ class App extends React.Component {
       // 1s are red
 
       turn: 1,
+      currentTurn: 0,
       zeroScore: 0,
       oneScore: 0,
       boardRep: [
@@ -35,6 +36,12 @@ class App extends React.Component {
   }
 
   handleClick(e, x, y) {
+    this.setState((state, props) => {
+      return {
+        turn: ++state.turn,
+        currentTurn: state.currentTurn === 0 ? 1 : 0
+      }
+    });
     console.log(`you clicked on square ${x},${y}`);
   }
 
@@ -42,9 +49,17 @@ class App extends React.Component {
 
   }
 
+  ComponentDidUpdate() {
+
+  }
+
   render() {
     return (
-      <Board boardRep={this.state.boardRep} onClick={this.handleClick}></Board>
+      <>
+        <Board boardRep={this.state.boardRep} onClick={this.handleClick}></Board>
+        <div>Turn: {this.state.turn}</div>
+        <div>Player {this.state.currentTurn} goes this turn</div>
+      </>
     );
   }
 }
