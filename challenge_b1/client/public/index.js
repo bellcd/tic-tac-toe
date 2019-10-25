@@ -1,34 +1,28 @@
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
       boardRep: [[null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null]]
     };
   }
 
+  handleClick(e, x, y) {
+    console.log(`you clicked on square ${x},${y}`);
+  }
+
   render() {
     return React.createElement(Board, {
-      boardRep: this.state.boardRep
+      boardRep: this.state.boardRep,
+      onClick: this.handleClick
     });
   }
 
 }
 
-const Square = ({
-  x,
-  y,
-  piece,
-  color
-}) => {
-  return React.createElement("div", {
-    className: `square-background ${color}`
-  }, `${x},${y}`, React.createElement("div", {
-    className: "square-content"
-  }, piece));
-};
-
 const Board = ({
-  boardRep
+  boardRep,
+  onClick
 }) => {
   let count = -1;
   let color;
@@ -42,13 +36,29 @@ const Board = ({
         y: i,
         x: j,
         piece: piece,
-        color: color
+        color: color,
+        onClick: onClick
       });
     }));
   }, []);
   return React.createElement("div", {
     id: "board"
   }, flatArr);
+};
+
+const Square = ({
+  x,
+  y,
+  piece,
+  color,
+  onClick
+}) => {
+  return React.createElement("div", {
+    className: `square-background ${color}`,
+    onClick: e => onClick(e, x, y)
+  }, `${x},${y}`, React.createElement("div", {
+    className: "square-content"
+  }, piece));
 };
 
 ReactDOM.render(React.createElement(App, null), document.querySelector('#root'));
