@@ -8,6 +8,10 @@ class App extends React.Component {
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
+      isTie: false,
+      isRowWin: false,
+      isColWin: false,
+      isDiagonalWin: false,
       message: '',
       count: 0, // TODO: better way to keep track of count??
       // each subarray is a row
@@ -31,9 +35,10 @@ class App extends React.Component {
     }
   }
 
-  updateMessage(message) {
+  updateMessage(win, message) {
     this.setState({
-      message: message
+      message: message,
+      [win]: true
     });
   }
 
@@ -226,18 +231,24 @@ class App extends React.Component {
   // TODO: check for opposite conditions? how many nulls are in each line??
   checkForWin() {
     let message;
+    let win;
+
     if (this.state.count === 42) {
       message = `It's a tie!`;
+      win = 'isTie';
     } else if (this.hasRowWin(this.state.gridRep)) {
       message = `There's a row win`;
+      win = 'isRowWin';
     } else if (this.hasColWin(this.state.gridRep)) {
       message = `There's a column win`;
+      win = 'isColWin'
     } else if (this.hasDiagonalWin(this.state.gridRep)) {
       message = `There's a diagonal win`;
+      win = 'isDiagonalWin'
     }
 
     if (message) {
-      this.updateMessage(message);
+      this.updateMessage(win, message);
     }
   }
 
