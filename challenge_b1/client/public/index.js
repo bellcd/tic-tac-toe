@@ -3,7 +3,10 @@ class App extends React.Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.state = {
-      boardRep: [[null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null]]
+      // 0s are white
+      // 1s are red
+      boardRep: [[null, 0, null, 0, null, 0, null, 0], [0, null, 0, null, 0, null, 0, null], [null, 0, null, 0, null, 0, null, 0], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [1, null, 1, null, 1, null, 1, null], [null, 1, null, 1, null, 1, null, 1], [1, null, 1, null, 1, null, 1, null]],
+      boardRepTempate: [[null, 0, null, 0, null, 0, null, 0], [0, null, 0, null, 0, null, 0, null], [null, 0, null, 0, null, 0, null, 0], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [1, null, 1, null, 1, null, 1, null], [null, 1, null, 1, null, 1, null, 1], [1, null, 1, null, 1, null, 1, null]]
     };
   }
 
@@ -56,7 +59,7 @@ const Square = ({
   return React.createElement("div", {
     className: `square-background ${color}`,
     onClick: e => onClick(e, x, y)
-  }, `${x},${y}`, React.createElement("div", {
+  }, React.createElement("div", {
     className: "square-content"
   }, piece));
 };
