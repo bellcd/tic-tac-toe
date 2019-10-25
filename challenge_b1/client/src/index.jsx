@@ -29,101 +29,111 @@ class App extends React.Component {
         [ null , 'red' ,  null , 'red' ,  null , 'red' ,  null , 'red' ],
         ['red' ,  null , 'red' ,  null , 'red' ,  null , 'red' ,  null ],
       ],
-      blackPiecesPossibleMoves: {
-        '1,0': {},
-        '3,0': {},
-        '5,0': {},
-        '7,0': {},
-        '0,1': {},
-        '2,1': {},
-        '4,1': {},
-        '6,1': {},
-        '1,2': {},
-        '3,2': {},
-        '5,2': {},
-        '7,2': {}
-      },
-      RedPiecesPossibleMoves: {
-        '0,5': {},
-        '2,5': {},
-        '4,5': {},
-        '6,5': {},
-        '1,6': {},
-        '3,6': {},
-        '5,6': {},
-        '7,6': {},
-        '0,7': {},
-        '2,7': {},
-        '4,7': {},
-        '6,7': {},
+      piecesPossibleMoves: { // TODO: is it necessary to have the current piece position in two locations??
+        '1,0': { current: 'black', moves: [] },
+        '3,0': { current: 'black', moves: [] },
+        '5,0': { current: 'black', moves: [] },
+        '7,0': { current: 'black', moves: [] },
+
+        '0,1': { current: 'black', moves: [] },
+        '2,1': { current: 'black', moves: [] },
+        '4,1': { current: 'black', moves: [] },
+        '6,1': { current: 'black', moves: [] },
+
+        '1,2': { current: 'black', moves: [] },
+        '3,2': { current: 'black', moves: [] },
+        '5,2': { current: 'black', moves: [] },
+        '7,2': { current: 'black', moves: [] },
+
+        '0,3': { current: '', moves: [] },
+        '2,3': { current: '', moves: [] },
+        '4,3': { current: '', moves: [] },
+        '6,3': { current: '', moves: [] },
+
+        '1,4': { current: '', moves: [] },
+        '3,4': { current: '', moves: [] },
+        '5,4': { current: '', moves: [] },
+        '7,4': { current: '', moves: [] },
+
+        '0,5': { current: 'red', moves: [] },
+        '2,5': { current: 'red', moves: [] },
+        '4,5': { current: 'red', moves: [] },
+        '6,5': { current: 'red', moves: [] },
+
+        '1,6': { current: 'red', moves: [] },
+        '3,6': { current: 'red', moves: [] },
+        '5,6': { current: 'red', moves: [] },
+        '7,6': { current: 'red', moves: [] },
+
+        '0,7': { current: 'red', moves: [] },
+        '2,7': { current: 'red', moves: [] },
+        '4,7': { current: 'red', moves: [] },
+        '6,7': { current: 'red', moves: [] },
       }
     }
   }
-  // maintain two ___PiecesPossibleMoves objects, one for each player, with the x,y coordinates of every piece for that player
-  // each list of possible moves for each piece starts out as an empty object
 
   determinePossibleMoves(turn, x, y) {
     const currentPlayer = turn;
     const otherPlayer = turn === 'black' ? 'red' : 'black';
-    let list = turn === 'black' ? this.state.blackPiecesPossibleMoves : this.state.RedPiecesPossibleMoves; // going to directly assign to list later, THEN call setState to replace the relevant property in setState when list is ready. decent workflow??
+    let list = this.state.piecesPossibleMoves; // going to directly assign to list later, THEN call setState to replace the relevant property in setState when list is ready. decent workflow??
+    let pieceX, pieceY, leftDiagonalX, leftDiagonalY, rightDiagonalX, rightDiagonalY, pieceColor;
 
-    let pieceX, pieceY, diagonalX, diagonalY;
+    for (let square in list) {
+      // filter list to only those that currently have a piece on them
+      if (list[square].current !== '') {
+        pieceX = Number(square[0]);
+        pieceY = Number(square[2]);
+        pieceColor = list[square].current // ie, 'red' or 'black'
 
-    // on every turn, check each piece in ___PiecesPossibleMoves
+        // for each immediate diagonal (above for 0's turn / below for 1's turn)
+        leftDiagonalX = pieceX - 1;
+        rightDiagonalX = pieceX + 1;
 
-    // get an array of all the keys
-    const currentPiecePositions = Object.keys(list).map(coords => coords.split(','));
-
-    // for each piece
-    currentPiecePositions.forEach(piece => {
-      pieceX = piece[0];
-      pieceY = piece[1];
-
-      // for each immediate diagonal (above for 0's turn / below for 1's turn)
-      leftDiagonalX = pieceX - 1;
-      rightDiagonalX = pieceX + 1;
-
-        if (turn === 'black') {
+        if (pieceColor === 'black') {
           leftDiagonalY = pieceY + 1;
           rightDiagonalY = pieceY + 1;
-        } else if (turn === 'red') {
+        } else if (pieceColor === 'red') {
           leftDiagonalY = pieceY - 1;
           rightDiagonalY = pieceY - 1
         }
 
+        const diagonals = [[leftDiagonalX, leftDiagonalY], [rightDiagonalX, rightDiagonalY]];
 
-        // if this diagonal is empty
-        if (this.state.boardRep[leftDiagonalY][leftDiagonalX] === null) {
-          // this square can be moved to
-          // update ___PiecesPossibleMoves to reflect that
+        for (let i = 0; i < 2; i++) {
 
-          // make sure I can add these to the list object properly ?? react state??
+          // if this diagonal is empty
+          if (this.state.boardRep[diagonals[i][1]][diagonals[i][0]] === null) {
+            // this square can be moved to
 
-          if (list[`${x},${y}`].length === 0) {
-            list[`${x},${y}`] = [
-              `${leftDiagonalX},${leftDiagonalY}`
-            ];
+            // add this diagonal to the list of possible moves for this square
+            if (list[square].moves.length === 0) {
+              list[square].moves = [ `${diagonals[i][0]},${diagonals[i][1]}` ];
+            } else {
+              list[square].moves.push(`${diagonals[i][0]},${diagonals[i][1]}`);
+            }
+
+          // else if this diagonal contains an enemy piece
+          } else if (this.state.boardRep[diagonals[i][1]][diagonals[i][0]] === otherPlayer) {
+            // get the coordinates for the square this enemy piece is on
+            // repeat the diagonal checking process from this square // recursion ???
           } else {
-            list[`${x},${y}`].push(`${leftDiagonalX},${leftDiagonalY}`);
+            // this diagonal contains a friendly piece, so can't move here
           }
-
-        // else if this diagonal contains an enemy piece
-        } else if (this.state.boardRep[leftDiagonalY][leftDiagonalX] === otherPlayer) {
-          // get the coordinates for the square this enemy piece is on
-          // repeat the diagonal checking process from this square // recursion ???
-        } else {
-          // this diagonal contains a friendly piece, so can't move here
         }
-    });
+      }
+    }
+    return list; // the function that accepts this list will call setState and update the React state
   }
 
   handleClick(e, x, y) {
-    this.determinePossibleMoves(this.state.turn, x, y);
+    const list = this.determinePossibleMoves(this.state.turn, x, y);
 
     this.setState((state, props) => {
       return {
         turn: ++state.turn,
-        currentTurn: state.currentTurn === 'black' ? 'red' : 'black'
+        currentTurn: state.currentTurn === 'black' ? 'red' : 'black',
+        piecesPossibleMoves: list
       }
     });
     console.log(`you clicked on square ${x},${y}`);
