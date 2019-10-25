@@ -8,6 +8,9 @@ class App extends React.Component {
       // 0s are white
       // 1s are red
 
+      turn: 1,
+      zeroScore: 0,
+      oneScore: 0,
       boardRep: [
         [null,   0 , null,   0 , null,   0 , null,   0 ],
         [  0 , null,   0 , null,   0 , null,   0 , null],
@@ -33,6 +36,10 @@ class App extends React.Component {
 
   handleClick(e, x, y) {
     console.log(`you clicked on square ${x},${y}`);
+  }
+
+  isGameOver() {
+
   }
 
   render() {

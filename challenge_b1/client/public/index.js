@@ -5,6 +5,9 @@ class App extends React.Component {
     this.state = {
       // 0s are white
       // 1s are red
+      turn: 1,
+      zeroScore: 0,
+      oneScore: 0,
       boardRep: [[null, 0, null, 0, null, 0, null, 0], [0, null, 0, null, 0, null, 0, null], [null, 0, null, 0, null, 0, null, 0], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [1, null, 1, null, 1, null, 1, null], [null, 1, null, 1, null, 1, null, 1], [1, null, 1, null, 1, null, 1, null]],
       boardRepTempate: [[null, 0, null, 0, null, 0, null, 0], [0, null, 0, null, 0, null, 0, null], [null, 0, null, 0, null, 0, null, 0], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], [1, null, 1, null, 1, null, 1, null], [null, 1, null, 1, null, 1, null, 1], [1, null, 1, null, 1, null, 1, null]]
     };
@@ -13,6 +16,8 @@ class App extends React.Component {
   handleClick(e, x, y) {
     console.log(`you clicked on square ${x},${y}`);
   }
+
+  isGameOver() {}
 
   render() {
     return React.createElement(Board, {
