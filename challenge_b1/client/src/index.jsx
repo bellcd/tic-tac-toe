@@ -23,18 +23,26 @@ class App extends React.Component {
   }
 }
 
-const Square = ({ x, y, piece}) => {
+const Square = ({ x, y, piece, color }) => {
   return (
-    <div class="square-background">
+    <div className={`square-background ${color}`}>
       {`${x},${y}`}
-      <div class="square-content">{piece}</div>
+      <div className="square-content">{piece}</div>
     </div>
   );
 }
 
 const Board = ({ boardRep }) => {
+  let count = -1;
+  let color;
+
   const flatArr = boardRep.reduce((acc, row, i) => {
-    return acc.concat(row.map((piece, j) => <Square key={`${i},${j}`} y={i} x={j} piece={piece}></Square>));
+    ++count;
+    return acc.concat(row.map((piece, j) => {
+      color = (count % 2 === 0) ? `light-square` : `dark-square`;
+      ++count;
+      return <Square key={`${i},${j}`} y={i} x={j} piece={piece} color={color}></Square>;
+    }));
   }, []);
 
   return (

@@ -8,13 +8,16 @@
 .square-background {
   height: 100%;
   width: 100%;
-  background-color: #f9f9f9;
 
   display: grid;
   justify-content: center;
   align-content: center;
 }
 
-.square-content {
+.light-square {
+  background-color: #f9f9f9;
+}
 
+.dark-square {
+  background-color: #e63434;
 }
