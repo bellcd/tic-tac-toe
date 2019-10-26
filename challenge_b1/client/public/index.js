@@ -5,7 +5,7 @@ class App extends React.Component {
     this.state = {
       turn: 1,
       currentTurn: 'black',
-      pieceToMove: '',
+      pieceToMove: undefined,
       blackScore: 0,
       redScore: 0,
       boardRep: [[null, 'black', null, 'black', null, 'black', null, 'black'], ['black', null, 'black', null, 'black', null, 'black', null], [null, 'black', null, 'black', null, 'black', null, 'black'], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], ['red', null, 'red', null, 'red', null, 'red', null], [null, 'red', null, 'red', null, 'red', null, 'red'], ['red', null, 'red', null, 'red', null, 'red', null]],
@@ -147,6 +147,8 @@ class App extends React.Component {
   addSquareToMovesList(list, square, diagonals, i) {
     if (list[square].moves.length === 0) {
       list[square].moves = [`${diagonals[i][0]},${diagonals[i][1]}`];
+    } else if (list[square].moves.indexOf(`${diagonals[i][0]},${diagonals[i][1]}`) !== -1) {// there's probably a more efficient way to check if the list already contains the relevant diagonal coordinates ...
+      // moves list already contains the diagonal coordinates
     } else {
       list[square].moves.push(`${diagonals[i][0]},${diagonals[i][1]}`);
     }
@@ -235,16 +237,14 @@ class App extends React.Component {
       return {
         turn: ++state.turn,
         currentTurn: state.currentTurn === 'black' ? 'red' : 'black',
-        piecesPossibleMoves: list
+        piecesPossibleMoves: list,
+        pieceToMove: `${x},${y}`
       };
     });
     console.log(`you clicked on square ${x},${y}`);
   }
 
-  changePieceToMove(x, y) {
-    this.setState({
-      pieceToMove: `${(x, y)}`
-    });
+  squareIsValidClickForThisTurn(x, y) {// square.current has to match currentTurn
   }
 
   isGameOver() {}
@@ -252,7 +252,8 @@ class App extends React.Component {
   render() {
     return React.createElement(React.Fragment, null, React.createElement(Board, {
       boardRep: this.state.boardRep,
-      onClick: this.handleClick
+      onClick: this.handleClick,
+      pieceToMove: this.state.pieceToMove
     }), React.createElement("div", null, "Turn: ", this.state.turn), React.createElement("div", null, "Player ", this.state.currentTurn, " goes this turn"));
   }
 
@@ -260,22 +261,32 @@ class App extends React.Component {
 
 const Board = ({
   boardRep,
-  onClick
+  onClick,
+  pieceToMove
 }) => {
   let count = -1;
   let color;
+  let onClickToPass;
   const flatArr = boardRep.reduce((acc, row, i) => {
     ++count;
     return acc.concat(row.map((piece, j) => {
-      color = count % 2 === 0 ? `light-square` : `dark-square`;
+      if (count % 2 === 0) {
+        color = `light-square`;
+        onClickToPass = ``;
+      } else {
+        color = `dark-square`;
+        onClickToPass = onClick;
+      }
+
       ++count;
       return React.createElement(Square, {
+        pieceToMove: pieceToMove,
         key: `${i},${j}`,
         y: i,
         x: j,
         piece: piece,
         color: color,
-        onClick: onClick
+        onClick: onClickToPass
       });
     }));
   }, []);
@@ -289,12 +300,23 @@ const Square = ({
   y,
   piece,
   color,
-  onClick
+  onClick,
+  pieceToMove
 }) => {
   let pieceColor = piece === 'black' ? 'black-piece' : 'red-piece';
+  pieceToMove = pieceToMove === `${x},${y}` ? `piece-to-move` : '';
+  let fn; // TODO: there's probably a better way to handle this ...
+
+  if (onClick === '') {
+    fn = () => {};
+  } else {
+    fn = e => onClick(e, x, y);
+  }
+
   return React.createElement("div", {
+    id: pieceToMove,
     className: `square-background ${color}`,
-    onClick: e => onClick(e, x, y)
+    onClick: fn
   }, `${x},${y}`, React.createElement("div", {
     className: "square-content"
   }, React.createElement("span", {

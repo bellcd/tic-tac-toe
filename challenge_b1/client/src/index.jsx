@@ -77,6 +77,8 @@ class App extends React.Component {
   addSquareToMovesList(list, square, diagonals, i) {
     if (list[square].moves.length === 0) {
       list[square].moves = [ `${diagonals[i][0]},${diagonals[i][1]}` ];
+    } else if (list[square].moves.indexOf(`${diagonals[i][0]},${diagonals[i][1]}`) !== -1) { // there's probably a more efficient way to check if the list already contains the relevant diagonal coordinates ...
+      // moves list already contains the diagonal coordinates
     } else {
       list[square].moves.push(`${diagonals[i][0]},${diagonals[i][1]}`);
     }
@@ -167,18 +169,21 @@ class App extends React.Component {
   handleClick(e, x, y) {
     const list = this.determinePossibleMoves(this.state.turn, x, y);
 
-    const pieceToMove = `${x},${y}`;
-
     this.setState((state, props) => {
       return {
         turn: ++state.turn,
         currentTurn: state.currentTurn === 'black' ? 'red' : 'black',
         piecesPossibleMoves: list,
-        pieceToMove
+        pieceToMove: `${x},${y}`
       }
     });
 
     console.log(`you clicked on square ${x},${y}`);
+  }
+
+  squareIsValidClickForThisTurn(x, y) {
+    // square.current has to match currentTurn
+
   }
 
   isGameOver() {
@@ -199,14 +204,21 @@ class App extends React.Component {
 const Board = ({ boardRep, onClick, pieceToMove }) => {
   let count = -1;
   let color;
-  let pieceToMove;
+  let onClickToPass;
 
   const flatArr = boardRep.reduce((acc, row, i) => {
     ++count;
     return acc.concat(row.map((piece, j) => {
-      color = (count % 2 === 0) ? `light-square` : `dark-square`;
+      if (count % 2 === 0) {
+        color = `light-square`
+        onClickToPass = ``;
+      } else {
+        color = `dark-square`;
+        onClickToPass = onClick;
+      }
+
       ++count;
-      return <Square pieceToMove={pieceToMove} key={`${i},${j}`} y={i} x={j} piece={piece} color={color} onClick={onClick}></Square>;
+      return <Square pieceToMove={pieceToMove} key={`${i},${j}`} y={i} x={j} piece={piece} color={color} onClick={onClickToPass}></Square>;
     }));
   }, []);
 
@@ -221,8 +233,16 @@ const Square = ({ x, y, piece, color, onClick, pieceToMove }) => {
   let pieceColor = piece === 'black' ? 'black-piece': 'red-piece';
   pieceToMove = pieceToMove === `${x},${y}` ? `piece-to-move` : '';
 
+  let fn;
+  // TODO: there's probably a better way to handle this ...
+  if (onClick === '') {
+    fn = () => {};
+  } else {
+    fn = (e) => onClick(e, x, y);
+  }
+
   return (
-    <div id={pieceToMove} className={`square-background ${color}`} onClick={(e) => onClick(e, x, y)}>
+    <div id={pieceToMove} className={`square-background ${color}`} onClick={fn}>
       {`${x},${y}`}
       <div className="square-content"><span className={pieceColor}>{piece}</span></div>
     </div>
