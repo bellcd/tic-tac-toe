@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel client/src --watch --out-dir client/public",
-    "test": "test",
+    "test": "mocha",
     "start": "nodemon server.js"
   },
   "author": "",
@@ -17,6 +17,8 @@
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/preset-react": "^7.6.3",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
     "nodemon": "^1.19.4"
   }
 }
