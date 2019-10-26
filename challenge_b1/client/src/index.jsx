@@ -74,6 +74,14 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const piecesPossibleMoves = this.determinePossibleMoves('black'); // only calculates initial moves for black, as black goes first ...
+
+    this.setState({
+      piecesPossibleMoves
+    });
+  }
+
   addSquareToMovesList(list, square, diagonals, i) {
     if (list[square].moves.length === 0) {
       list[square].moves = [ `${diagonals[i][0]},${diagonals[i][1]}` ];
@@ -85,15 +93,14 @@ class App extends React.Component {
   }
 
   // TODO: is there a simpler way to handle this??
-  determinePossibleMoves(turn, x, y) {
-    const currentPlayer = turn;
-    const otherPlayer = turn === 'black' ? 'red' : 'black';
+  determinePossibleMoves(currentTurn) {
+    const otherPlayer = currentTurn === 'black' ? 'red' : 'black';
     let list = this.state.piecesPossibleMoves; // going to directly assign to list later, THEN call setState to replace the relevant property in setState when list is ready. decent workflow??
     let pieceX, pieceY, leftDiagonalX, leftDiagonalY, rightDiagonalX, rightDiagonalY, pieceColor;
 
     for (let square in list) {
-      // filter list to only those that currently have a piece on them
-      if (list[square].current !== '') {
+      // only visit those that currently have the piece whose turn we're on
+      if (list[square].current === currentTurn) {
         pieceX = Number(square[0]);
         pieceY = Number(square[2]);
         pieceColor = list[square].current // ie, 'red' or 'black'
@@ -122,7 +129,6 @@ class App extends React.Component {
             this.addSquareToMovesList(list, square, diagonals, i);
 
           // else if this diagonal contains an enemy piece
-          // } else if (this.state.boardRep[diagonals[i][1]][diagonals[i][0]] === otherPlayer) {
           } else if (this.state.boardRep[leftDiagonalY][leftDiagonalX] === otherPlayer) {
             // leftDiagonal has an enemy piece on it
 
@@ -167,7 +173,7 @@ class App extends React.Component {
   }
 
   handleClick(e, x, y) {
-    const list = this.determinePossibleMoves(this.state.turn, x, y);
+    const list = this.determinePossibleMoves(this.state.currentTurn);
 
     this.setState((state, props) => {
       return {
