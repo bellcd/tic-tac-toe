@@ -5,7 +5,6 @@
   "license": "MIT",
   "scripts": {
     "build": "./node_modules/.bin/babel ./client/app.jsx --watch --out-file ./public/app.js",
-    "test": "do thing two",
     "start": "nodemon ./server.js"
   },
   "dependencies": {

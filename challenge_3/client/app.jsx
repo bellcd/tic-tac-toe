@@ -36,6 +36,7 @@ class PageOne extends React.Component {
           inputFieldText={'Name'}
           inputFieldType={'name'}
           value={this.props.name}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -43,6 +44,7 @@ class PageOne extends React.Component {
           inputFieldText={'Email'}
           inputFieldType={'email'}
           value={this.props.email}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -50,6 +52,7 @@ class PageOne extends React.Component {
           inputFieldText={'Password'}
           inputFieldType={'password'}
           value={this.props.password}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -76,6 +79,7 @@ class PageTwo extends React.Component {
           inputFieldText={'Address'}
           inputFieldType={'address_line_1'}
           value={this.props.address_line_1}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -83,6 +87,7 @@ class PageTwo extends React.Component {
           inputFieldText={'Address (cont)'}
           inputFieldType={'address_line_2'}
           value={this.props.address_line_2}
+          required={false}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -90,6 +95,7 @@ class PageTwo extends React.Component {
           inputFieldText={'City'}
           inputFieldType={'city'}
           value={this.props.city}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -97,6 +103,7 @@ class PageTwo extends React.Component {
           inputFieldText={'State'}
           inputFieldType={'state'}
           value={this.props.state}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -104,6 +111,7 @@ class PageTwo extends React.Component {
           inputFieldText={'Zip Code'}
           inputFieldType={'zip_code'}
           value={this.props.zip_code}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -111,6 +119,7 @@ class PageTwo extends React.Component {
           inputFieldText={'Phone Num'}
           inputFieldType={'phone_num'}
           value={this.props.phone_num}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -137,6 +146,7 @@ class PageThree extends React.Component {
           inputFieldText={'Credit Card Number'}
           inputFieldType={'cc_number'}
           value={this.props.cc_number}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -144,6 +154,7 @@ class PageThree extends React.Component {
           inputFieldText={'Credit Card Expiration Date'}
           inputFieldType={'cc_exp'}
           value={this.props.cc_exp}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -151,6 +162,7 @@ class PageThree extends React.Component {
           inputFieldText={'CVV'}
           inputFieldType={'cvv'}
           value={this.props.cvv}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -158,6 +170,7 @@ class PageThree extends React.Component {
           inputFieldText={'Billing Zip Code'}
           inputFieldType={'zip_code_billing'}
           value={this.props.zip_code_billing}
+          required={true}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
@@ -246,7 +259,7 @@ const Button = ({ onClick, text, pageNum }) => {
   );
 }
 
-const InputField = ({ inputFieldText, inputFieldType, value, onInputFieldChange }) => {
+const InputField = ({ inputFieldText, inputFieldType, value, onInputFieldChange, required }) => {
   return (
     <div>
       <label htmlFor={inputFieldType}>{inputFieldText}</label>
@@ -255,6 +268,7 @@ const InputField = ({ inputFieldText, inputFieldType, value, onInputFieldChange 
         name={inputFieldType}
         value={value}
         onChange={onInputFieldChange}
+        required={required}
       >
       </input>
     </div>
