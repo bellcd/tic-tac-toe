@@ -7,6 +7,7 @@ class App extends React.Component {
     this.state = {
       turn: 1,
       currentTurn: 'black',
+      pieceToMove: undefined,
       blackScore: 0,
       redScore: 0,
       boardRep: [
@@ -81,6 +82,7 @@ class App extends React.Component {
     }
   }
 
+  // TODO: is there a simpler way to handle this??
   determinePossibleMoves(turn, x, y) {
     const currentPlayer = turn;
     const otherPlayer = turn === 'black' ? 'red' : 'black';
@@ -106,7 +108,7 @@ class App extends React.Component {
           rightDiagonalY = pieceY - 1
         }
 
-        const diagonals = [[leftDiagonalX, leftDiagonalY], [rightDiagonalX, rightDiagonalY]];
+        let diagonals = [[leftDiagonalX, leftDiagonalY], [rightDiagonalX, rightDiagonalY]];
 
         for (let i = 0; i < 2; i++) {
 
@@ -115,7 +117,7 @@ class App extends React.Component {
             // this square can be moved to
 
             // add this diagonal to the list of possible moves for this square
-            this.addSquareToMovesList(list, square, diagonals);
+            this.addSquareToMovesList(list, square, diagonals, i);
 
           // else if this diagonal contains an enemy piece
           // } else if (this.state.boardRep[diagonals[i][1]][diagonals[i][0]] === otherPlayer) {
@@ -131,18 +133,27 @@ class App extends React.Component {
               secondDiagonalY = leftDiagonalY + 1;
             }
 
-            diagonals = [[secondDiagonalX, secondDiagonalY]];
-
-            // let coorsToCheck = `${leftDiagonalX - 1},${leftDiagonalY - 1}`
-
             // if left diagonal from the enemy square is empty
             if (this.state.boardRep[secondDiagonalY][secondDiagonalX] === null) {
               // add that square to moves list
-              this.addSquareToMovesList(list, square, diagonals, 0);
+              this.addSquareToMovesList(list, square, [[secondDiagonalX, secondDiagonalY]], 0);
             }
           } else if (this.state.boardRep[rightDiagonalY][rightDiagonalX] === otherPlayer) {
             // rightDiagonal has an enemy piece on it
-            // ...
+            let secondDiagonalY;
+            let secondDiagonalX = rightDiagonalX + 1
+
+            if (pieceColor === 'red') {
+              secondDiagonalY = rightDiagonalY - 1;
+            } else {
+              secondDiagonalY = rightDiagonalY + 1;
+            }
+
+            // if right diagonal from the enemy square is empty
+            if (this.state.boardRep[secondDiagonalY][secondDiagonalX] === null) {
+              // add that square to moves list
+              this.addSquareToMovesList(list, square, [[secondDiagonalX, secondDiagonalY]], 0);
+            }
           }
           else {
             // this diagonal contains a friendly piece, so can't move here
@@ -156,13 +167,17 @@ class App extends React.Component {
   handleClick(e, x, y) {
     const list = this.determinePossibleMoves(this.state.turn, x, y);
 
+    const pieceToMove = `${x},${y}`;
+
     this.setState((state, props) => {
       return {
         turn: ++state.turn,
         currentTurn: state.currentTurn === 'black' ? 'red' : 'black',
-        piecesPossibleMoves: list
+        piecesPossibleMoves: list,
+        pieceToMove
       }
     });
+
     console.log(`you clicked on square ${x},${y}`);
   }
 
@@ -173,7 +188,7 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <Board boardRep={this.state.boardRep} onClick={this.handleClick}></Board>
+        <Board boardRep={this.state.boardRep} onClick={this.handleClick} pieceToMove={this.state.pieceToMove}></Board>
         <div>Turn: {this.state.turn}</div>
         <div>Player {this.state.currentTurn} goes this turn</div>
       </>
@@ -181,16 +196,17 @@ class App extends React.Component {
   }
 }
 
-const Board = ({ boardRep, onClick }) => {
+const Board = ({ boardRep, onClick, pieceToMove }) => {
   let count = -1;
   let color;
+  let pieceToMove;
 
   const flatArr = boardRep.reduce((acc, row, i) => {
     ++count;
     return acc.concat(row.map((piece, j) => {
       color = (count % 2 === 0) ? `light-square` : `dark-square`;
       ++count;
-      return <Square key={`${i},${j}`} y={i} x={j} piece={piece} color={color} onClick={onClick}></Square>;
+      return <Square pieceToMove={pieceToMove} key={`${i},${j}`} y={i} x={j} piece={piece} color={color} onClick={onClick}></Square>;
     }));
   }, []);
 
@@ -201,11 +217,12 @@ const Board = ({ boardRep, onClick }) => {
   );
 }
 
-const Square = ({ x, y, piece, color, onClick }) => {
+const Square = ({ x, y, piece, color, onClick, pieceToMove }) => {
   let pieceColor = piece === 'black' ? 'black-piece': 'red-piece';
+  pieceToMove = pieceToMove === `${x},${y}` ? `piece-to-move` : '';
 
   return (
-    <div className={`square-background ${color}`} onClick={(e) => onClick(e, x, y)}>
+    <div id={pieceToMove} className={`square-background ${color}`} onClick={(e) => onClick(e, x, y)}>
       {`${x},${y}`}
       <div className="square-content"><span className={pieceColor}>{piece}</span></div>
     </div>

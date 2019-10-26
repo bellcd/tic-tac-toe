@@ -18,6 +18,10 @@ html {
   align-content: center;
 }
 
+#piece-to-move {
+  border: 2px blue solid;
+}
+
 .light-square {
   background-color: #fffadf;
 }

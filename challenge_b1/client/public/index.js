@@ -5,6 +5,7 @@ class App extends React.Component {
     this.state = {
       turn: 1,
       currentTurn: 'black',
+      pieceToMove: '',
       blackScore: 0,
       redScore: 0,
       boardRep: [[null, 'black', null, 'black', null, 'black', null, 'black'], ['black', null, 'black', null, 'black', null, 'black', null], [null, 'black', null, 'black', null, 'black', null, 'black'], [null, null, null, null, null, null, null, null], [null, null, null, null, null, null, null, null], ['red', null, 'red', null, 'red', null, 'red', null], [null, 'red', null, 'red', null, 'red', null, 'red'], ['red', null, 'red', null, 'red', null, 'red', null]],
@@ -149,7 +150,8 @@ class App extends React.Component {
     } else {
       list[square].moves.push(`${diagonals[i][0]},${diagonals[i][1]}`);
     }
-  }
+  } // TODO: is there a simpler way to handle this??
+
 
   determinePossibleMoves(turn, x, y) {
     const currentPlayer = turn;
@@ -177,14 +179,14 @@ class App extends React.Component {
           rightDiagonalY = pieceY - 1;
         }
 
-        const diagonals = [[leftDiagonalX, leftDiagonalY], [rightDiagonalX, rightDiagonalY]];
+        let diagonals = [[leftDiagonalX, leftDiagonalY], [rightDiagonalX, rightDiagonalY]];
 
         for (let i = 0; i < 2; i++) {
           // if this diagonal is empty
           if (this.state.boardRep[diagonals[i][1]][diagonals[i][0]] === null) {
             // this square can be moved to
             // add this diagonal to the list of possible moves for this square
-            this.addSquareToMovesList(list, square, diagonals); // else if this diagonal contains an enemy piece
+            this.addSquareToMovesList(list, square, diagonals, i); // else if this diagonal contains an enemy piece
             // } else if (this.state.boardRep[diagonals[i][1]][diagonals[i][0]] === otherPlayer) {
           } else if (this.state.boardRep[leftDiagonalY][leftDiagonalX] === otherPlayer) {
             // leftDiagonal has an enemy piece on it
@@ -195,19 +197,31 @@ class App extends React.Component {
               secondDiagonalY = leftDiagonalY - 1;
             } else {
               secondDiagonalY = leftDiagonalY + 1;
-            }
+            } // if left diagonal from the enemy square is empty
 
-            diagonals = [[secondDiagonalX, secondDiagonalY]]; // let coorsToCheck = `${leftDiagonalX - 1},${leftDiagonalY - 1}`
-            // if left diagonal from the enemy square is empty
 
             if (this.state.boardRep[secondDiagonalY][secondDiagonalX] === null) {
               // add that square to moves list
-              this.addSquareToMovesList(list, square, diagonals, 0);
+              this.addSquareToMovesList(list, square, [[secondDiagonalX, secondDiagonalY]], 0);
             }
-          } else if (this.state.boardRep[rightDiagonalY][rightDiagonalX] === otherPlayer) {// rightDiagonal has an enemy piece on it
-            // ...
+          } else if (this.state.boardRep[rightDiagonalY][rightDiagonalX] === otherPlayer) {
+            // rightDiagonal has an enemy piece on it
+            let secondDiagonalY;
+            let secondDiagonalX = rightDiagonalX + 1;
+
+            if (pieceColor === 'red') {
+              secondDiagonalY = rightDiagonalY - 1;
+            } else {
+              secondDiagonalY = rightDiagonalY + 1;
+            } // if right diagonal from the enemy square is empty
+
+
+            if (this.state.boardRep[secondDiagonalY][secondDiagonalX] === null) {
+              // add that square to moves list
+              this.addSquareToMovesList(list, square, [[secondDiagonalX, secondDiagonalY]], 0);
+            }
           } else {// this diagonal contains a friendly piece, so can't move here
-            }
+          }
         }
       }
     }
@@ -225,6 +239,12 @@ class App extends React.Component {
       };
     });
     console.log(`you clicked on square ${x},${y}`);
+  }
+
+  changePieceToMove(x, y) {
+    this.setState({
+      pieceToMove: `${(x, y)}`
+    });
   }
 
   isGameOver() {}
