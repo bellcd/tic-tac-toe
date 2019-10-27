@@ -61,7 +61,7 @@ class PageOne extends React.Component {
           inputFieldType={'password'}
           value={this.props.password}
           required={true}
-          pattern={'.+'}
+          pattern={'.{6,}'}
           refsToPass={this.props.refsToPass.password}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -92,7 +92,7 @@ class PageTwo extends React.Component {
           inputFieldType={'address_line_1'}
           value={this.props.address_line_1}
           required={true}
-          pattern={'[a-z|A-Z|1-9| |.]+'}
+          pattern={'[a-z|A-Z|0-9| |.]+'}
           refsToPass={this.props.refsToPass.address_line_1}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -102,7 +102,7 @@ class PageTwo extends React.Component {
           inputFieldType={'address_line_2'}
           value={this.props.address_line_2}
           required={false}
-          pattern={'[a-z|A-Z|1-9| |.]+'}
+          pattern={'[a-z|A-Z|0-9| |.]+'}
           refsToPass={this.props.refsToPass.address_line_2}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -132,7 +132,7 @@ class PageTwo extends React.Component {
           inputFieldType={'zip_code'}
           value={this.props.zip_code}
           required={true}
-          pattern={'[1-9]{5}'}
+          pattern={'[0-9]{5}'}
           refsToPass={this.props.refsToPass.zip_code}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -200,7 +200,7 @@ class PageThree extends React.Component {
           inputFieldType={'cvv'}
           value={this.props.cvv}
           required={true}
-          pattern={'[1-9]{3}'}
+          pattern={'[0-9]{3}'}
           refsToPass={this.props.refsToPass.cvv}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -210,7 +210,7 @@ class PageThree extends React.Component {
           inputFieldType={'zip_code_billing'}
           value={this.props.zip_code_billing}
           required={true}
-          pattern={'[1-9]{5}'}
+          pattern={'[0-9]{5}'}
           refsToPass={this.props.refsToPass.zip_code_billing}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -368,10 +368,6 @@ class App extends React.Component {
     this.handleInputFieldChange = this.handleInputFieldChange.bind(this);
   }
 
-  showErrorMessage() {
-    alert('Fix the errors!')
-  }
-
   invokeFetch(url, data) {
     fetch(url, {
       method: 'POST',
@@ -395,7 +391,8 @@ class App extends React.Component {
   }
 
   handlePageOneClick(e) {
-    if (!this.state.canContinue) {
+    const pageOneRefs = [this.refsToPass.name, this.refsToPass.email, this.refsToPass.password];
+    if (!this.canContinue(pageOneRefs)) {
       this.showErrorMessage();
       return;
     }
@@ -411,7 +408,8 @@ class App extends React.Component {
   }
 
   handlePageTwoClick(e) {
-    if (!this.state.canContinue) {
+    const pageTwoRefs = [this.refsToPass.address_line_1, this.refsToPass.address_line_2, this.refsToPass.city, this.refsToPass.state, this.refsToPass.zip_code, this.refsToPass.phone_num];
+    if (!this.canContinue(pageTwoRefs)) {
       this.showErrorMessage();
       return;
     }
@@ -431,7 +429,9 @@ class App extends React.Component {
   }
 
   handlePageThreeClick(e) {
-    if (!this.state.canContinue) {
+    const pageThreeRefs = [this.refsToPass.cc_number, this.refsToPass.cc_exp, this.refsToPass.cvv, this.refsToPass.zip_code_billing];
+
+    if (!this.canContinue(pageThreeRefs)) {
       this.showErrorMessage();
       return;
     }
@@ -456,15 +456,64 @@ class App extends React.Component {
 
   handleInputFieldChange(e) {
     const element = this.refsToPass[e.target.name].current;
-    console.log(element);
-    console.log(element.validity);
 
+    // remove any previous custom errors
+    element.setCustomValidity('');
+
+    // validation
+    if (!element.checkValidity()) {
+      if (element.name === 'name') {
+        element.setCustomValidity('Please enter your name');
+      } else if (element.name === 'email') {
+        element.setCustomValidity('ie, MyName@MyEmailAddress.com');
+      } else if (element.name === 'password') {
+        element.setCustomValidity('Passwords must be at least 6 characters long');
+      } else if (element.name === 'address_line_1') {
+        element.setCustomValidity('Please enter your address');
+      } else if (element.name === 'address_line_2') {
+
+        // TODO: unneeded?? no validation on this form field??
+        element.setCustomValidity('Please enter line 2 of your address');
+      } else if (element.name === 'city') {
+        element.setCustomValidity('Please enter your city');
+      } else if (element.name === 'state') {
+
+        // TODO: remove when I change this input element to a spinner to state initials ... PA, NY, CA, etc ...
+        element.setCustomValidity('Please enter your state');
+      } else if (element.name === 'zip_code') {
+        element.setCustomValidity('Please enter your zip code');
+      } else if (element.name === 'phone_num') {
+        element.setCustomValidity('Please enter your phone number');
+      } else if (element.name === 'cc_number') {
+        element.setCustomValidity('Please enter your credit card number');
+      } else if (element.name === 'cc_exp') {
+        element.setCustomValidity(`Please enter your credit card's expiration number`);
+      } else if (element.name === 'cvv') {
+        element.setCustomValidity('Please enter your cvv number');
+      } else if (element.name === 'zip_code_billing') {
+        element.setCustomValidity('Please enter the billing zip code of your credit card')
+      }
+    }
     element.reportValidity();
 
     this.setState({
-      [e.target.name]: e.target.value,
-      canContinue: element.checkValidity()
+      [e.target.name]: e.target.value
     })
+  }
+
+  canContinue(areRefsValid) {
+    return areRefsValid.every(ref => {
+      if (ref.current.name === 'address_line_2') {
+        return true;
+      }
+
+      return ref.current.checkValidity()
+    });
+  }
+
+  // TODO: change how these messages are displayed ...
+  showErrorMessage() {
+    alert('Your entries are invalid. Please try again.');
   }
 
   render() {
