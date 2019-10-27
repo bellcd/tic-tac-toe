@@ -32,22 +32,26 @@ class PageOne extends React.Component {
   render() {
     return (
       <div className={this.props.activePage === 'PageOne' ? '' : 'hide'}>
+        {/* // TODO: extract to component?? */}
+        <div>* Indicates Required</div>
         <InputField
           inputFieldText={'Name'}
           inputFieldType={'name'}
           value={this.props.name}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'[a-z|A-Z]+'} // TODO: all the regex needs to be passed as a STRING (ie, without containing forward slashes /.../ )
           refsToPass={this.props.refsToPass.name}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
+
+        {/* // TODO: confirm this?? */}
         <InputField
           inputFieldText={'Email'}
           inputFieldType={'email'}
           value={this.props.email}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'.+'}
           refsToPass={this.props.refsToPass.email}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -57,7 +61,7 @@ class PageOne extends React.Component {
           inputFieldType={'password'}
           value={this.props.password}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'.+'}
           refsToPass={this.props.refsToPass.password}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -81,12 +85,14 @@ class PageTwo extends React.Component {
   render() {
     return (
       <div className={this.props.activePage === 'PageTwo' ? '' : 'hide'}>
+        {/* // TODO: extract to component?? */}
+        <div>* Indicates Required</div>
         <InputField
           inputFieldText={'Address'}
           inputFieldType={'address_line_1'}
           value={this.props.address_line_1}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'[a-z|A-Z|1-9| |.]+'}
           refsToPass={this.props.refsToPass.address_line_1}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -96,7 +102,7 @@ class PageTwo extends React.Component {
           inputFieldType={'address_line_2'}
           value={this.props.address_line_2}
           required={false}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'[a-z|A-Z|1-9| |.]+'}
           refsToPass={this.props.refsToPass.address_line_2}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -106,7 +112,7 @@ class PageTwo extends React.Component {
           inputFieldType={'city'}
           value={this.props.city}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'[a-z|A-Z| |.]+'}
           refsToPass={this.props.refsToPass.city}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -116,7 +122,7 @@ class PageTwo extends React.Component {
           inputFieldType={'state'}
           value={this.props.state}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'[a-z|A-Z| |]+'}
           refsToPass={this.props.refsToPass.state}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -126,17 +132,19 @@ class PageTwo extends React.Component {
           inputFieldType={'zip_code'}
           value={this.props.zip_code}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'[1-9]{5}'}
           refsToPass={this.props.refsToPass.zip_code}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
+
+        {/* // TODO: confirm this ?? */}
         <InputField
           inputFieldText={'Phone Num'}
           inputFieldType={'phone_num'}
           value={this.props.phone_num}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$'}
           refsToPass={this.props.refsToPass.phone_num}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -160,22 +168,29 @@ class PageThree extends React.Component {
   render() {
     return (
       <div className={this.props.activePage === 'PageThree' ? '' : 'hide'}>
+
+        {/* // TODO: extract to component?? */}
+        <div>* Indicates Required</div>
+
+        {/* // TODO: only visa ?? */}
         <InputField
           inputFieldText={'Credit Card Number'}
           inputFieldType={'cc_number'}
           value={this.props.cc_number}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'.+'}
           refsToPass={this.props.refsToPass.cc_number}
           onInputFieldChange={this.props.onInputFieldChange}
         >
         </InputField>
+
+        {/* // TODO: confirm this?? */}
         <InputField
           inputFieldText={'Credit Card Expiration Date'}
           inputFieldType={'cc_exp'}
           value={this.props.cc_exp}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'.+'}
           refsToPass={this.props.refsToPass.cc_exp}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -185,7 +200,7 @@ class PageThree extends React.Component {
           inputFieldType={'cvv'}
           value={this.props.cvv}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'[1-9]{3}'}
           refsToPass={this.props.refsToPass.cvv}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -195,7 +210,7 @@ class PageThree extends React.Component {
           inputFieldType={'zip_code_billing'}
           value={this.props.zip_code_billing}
           required={true}
-          pattern={/[a-z|A-Z]+/}
+          pattern={'[1-9]{5}'}
           refsToPass={this.props.refsToPass.zip_code_billing}
           onInputFieldChange={this.props.onInputFieldChange}
         >
@@ -288,6 +303,7 @@ const Button = ({ onClick, text, pageNum }) => {
 const InputField = ({ inputFieldText, inputFieldType, value, onInputFieldChange, required, pattern, refsToPass }) => {
   return (
     <div>
+      <span>{required ? '*' : ''}</span>
       <label htmlFor={inputFieldType}>{inputFieldText}</label>
       <input
         type="text"
@@ -326,6 +342,7 @@ class App extends React.Component {
 
     // TODO: (the response from the server??) to each button click will change which view is active ...
     this.state = {
+      canContinue: false,
       url: `http://localhost:3000`,
       activePage: 'Homepage',
       name: '',
@@ -351,6 +368,10 @@ class App extends React.Component {
     this.handleInputFieldChange = this.handleInputFieldChange.bind(this);
   }
 
+  showErrorMessage() {
+    alert('Fix the errors!')
+  }
+
   invokeFetch(url, data) {
     fetch(url, {
       method: 'POST',
@@ -374,6 +395,11 @@ class App extends React.Component {
   }
 
   handlePageOneClick(e) {
+    if (!this.state.canContinue) {
+      this.showErrorMessage();
+      return;
+    }
+
     const url = `${this.state.url}/page-one`;
     const data = {
       name: this.state.name,
@@ -385,6 +411,11 @@ class App extends React.Component {
   }
 
   handlePageTwoClick(e) {
+    if (!this.state.canContinue) {
+      this.showErrorMessage();
+      return;
+    }
+
     const url = `${this.state.url}/page-two`;
     const data = {
       email: this.state.email,
@@ -400,6 +431,11 @@ class App extends React.Component {
   }
 
   handlePageThreeClick(e) {
+    if (!this.state.canContinue) {
+      this.showErrorMessage();
+      return;
+    }
+
     const url = `${this.state.url}/page-three`;
     const data = {
       email: this.state.email,
@@ -419,10 +455,15 @@ class App extends React.Component {
   }
 
   handleInputFieldChange(e) {
-    console.log(this.refsToPass[e.target.name].current);
+    const element = this.refsToPass[e.target.name].current;
+    console.log(element);
+    console.log(element.validity);
+
+    element.reportValidity();
 
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      canContinue: element.checkValidity()
     })
   }
 
