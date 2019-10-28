@@ -15,9 +15,9 @@ connection.connect((err) => {
 });
 
 // TODO: modify interface to use the same tyle as updateRecord ...
-function createRecord(name, email, password, callback) {
+function createRecord(name, email, password, session_cookie, callback) {
   debugger;
-  connection.query(`INSERT INTO cart(name, email, password) VALUES(?, ?, ?)`, [name, email, password], (err, results, fields) => {
+  connection.query(`INSERT INTO cart(name, email, password, session_cookie) VALUES(?, ?, ?, ?)`, [name, email, password, session_cookie], (err, results, fields) => {
     if (err) {
       callback(err, null);
       return;

@@ -570,4 +570,12 @@ class App extends React.Component {
 
 ReactDOM.render(<App></App>, document.querySelector('#root'));
 
-
+// after page one submission ??
+  // create and store a session cookie on the users browser
+// inside ComponentDidMount, check if session cookie exists in browser ?? always attempt to grab it from the browser and save it to state??
+  // if sessionCookie exists on state
+    // API request to the server to get the following details associated with that sessionCookie
+      // email
+      // activePage
+    // save those values to the React state
+  // display the appropriate page based on the current value of activePage

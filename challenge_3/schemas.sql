@@ -18,6 +18,7 @@ CREATE TABLE cart (
   cc_exp VARCHAR(255), -- TODO: change this to a date value??
   cvv INT,
   zip_code_billing INT,
+  session_cookie VARCHAR(255),
 
   PRIMARY KEY (id)
 );
