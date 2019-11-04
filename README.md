@@ -1,2 +1,2 @@
-# mini-apps-1
-This is a project I completed as a student at [hackreactor](http://hackreactor.com). This project was worked on with a pair.
+# Tic Tac Toe
+An implementation of the classic game tic tac toe, for two players. Includes rotation and gravity features to make the game more interesting. Built with vanilla JavaScript, HTML, & CSS.
